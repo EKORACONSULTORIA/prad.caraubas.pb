@@ -1,6 +1,6 @@
 # Dashboard PRAD — UFV Rio do Peixe I e II
 
-Dashboard interativo (HTML/Chart.js) do monitoramento PRAD — Caraúbas-PB, Junho/2026.
+Dashboard interativo (HTML/Chart.js) do monitoramento PRAD — Caraúbas-PB, Julho/2026.
 Bragagnoli Ambiental / EKORA Consultoria Ambiental.
 
 ## Deploy (GitHub Pages)
