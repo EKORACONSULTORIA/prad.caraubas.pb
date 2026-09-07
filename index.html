@@ -347,6 +347,53 @@ tbody tr:hover{background:rgba(59,130,246,0.08);box-shadow:inset 0 0 20px rgba(5
   background:linear-gradient(135deg,var(--gold),var(--silver),var(--chrome),var(--silver),var(--gold));
   -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
   -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
+
+/* ===== SPECIES SHOWCASE & PEST ALERT (standard) ===== */
+.species-card .showcase-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.showcase-item{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--glass-border);
+  background:var(--card);cursor:pointer;transition:all .5s cubic-bezier(.4,0,.2,1);}
+.showcase-item img{width:100%;height:180px;object-fit:cover;display:block;filter:grayscale(.45) brightness(.85);
+  transform:scale(1);transition:all .6s ease;}
+.showcase-item .cap{position:absolute;inset:auto 0 0 0;padding:12px 14px;color:#fff;
+  background:linear-gradient(0deg,rgba(5,8,14,.85),transparent);}
+.showcase-item .cap b{display:block;font-size:15px;letter-spacing:.4px;}
+.showcase-item .cap span{font-size:11px;font-style:italic;color:var(--gray1);}
+.showcase-item.active{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(6,182,212,.4),
+  0 12px 34px rgba(6,182,212,.25);transform:translateY(-4px);}
+.showcase-item.active img{filter:none;transform:scale(1.07);}
+.showcase-item .cap::after{content:'● DESTAQUE';position:absolute;top:-26px;right:10px;font-size:9px;font-weight:900;
+  letter-spacing:1px;color:#0b1220;background:linear-gradient(90deg,var(--cyan),var(--success));
+  padding:3px 10px;border-radius:6px;opacity:0;transition:.4s;}
+.showcase-item.active .cap::after{opacity:1;}
+
+.alert-banner{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:800;letter-spacing:.5px;
+  padding:11px 16px;border-radius:10px;margin-bottom:16px;text-transform:uppercase;}
+.alert-banner.warn{background:rgba(245,158,11,.12);color:#fcd34d;border:1px solid rgba(245,158,11,.4);
+  box-shadow:0 0 18px rgba(245,158,11,.18);}
+.alert-banner.ok{background:rgba(16,185,129,.12);color:var(--success);border:1px solid rgba(16,185,129,.4);
+  box-shadow:0 0 18px rgba(16,185,129,.18);}
+.pulse-dot{width:10px;height:10px;border-radius:50%;background:currentColor;box-shadow:0 0 12px currentColor;
+  animation:pulse 1.2s infinite;flex-shrink:0;}
+.pest-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.pest-card{background:var(--card);border:1px solid var(--glass-border);border-radius:14px;overflow:hidden;
+  backdrop-filter:blur(12px);transition:all .3s ease;}
+.pest-card:hover{transform:translateY(-4px);}
+.pest-card.pest-alert{border-color:rgba(245,158,11,.45);box-shadow:0 0 18px rgba(245,158,11,.16);}
+.pest-card img{width:100%;height:120px;object-fit:cover;display:block;
+  filter:grayscale(.4) brightness(.88);transition:all .4s ease;}
+.pest-card.pest-alert img{filter:none;animation:alertGlow 2.4s ease-in-out infinite;}
+@keyframes alertGlow{0%,100%{filter:none;}50%{filter:sepia(.4) saturate(1.4) brightness(1.1);}}
+.pest-body{padding:12px 14px;}
+.pest-body b{display:block;font-size:13.5px;color:var(--white);}
+.pest-body .sci{font-size:11px;font-style:italic;color:var(--gray1);margin:2px 0 8px;display:block;}
+.pest-status{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:800;
+  letter-spacing:.4px;text-transform:uppercase;padding:5px 12px;border-radius:20px;}
+.pest-status .sdot{width:8px;height:8px;border-radius:50%;box-shadow:0 0 8px currentColor;animation:pulse 1.2s infinite;}
+.pest-status.warn{background:rgba(245,158,11,.14);color:#fcd34d;border:1px solid rgba(245,158,11,.4);}
+.pest-status.ok{background:rgba(16,185,129,.14);color:var(--success);border:1px solid rgba(16,185,129,.4);}
+.pest-status.watch{background:rgba(6,182,212,.14);color:var(--cyan);border:1px solid rgba(6,182,212,.4);}
+@media(max-width:900px){.species-card .showcase-grid,.pest-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.showcase-item img{height:140px;}.species-card .showcase-grid,.pest-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -670,6 +717,13 @@ tbody tr:hover{background:rgba(59,130,246,0.08);box-shadow:inset 0 0 20px rgba(5
   <div id="species" class="tab-content">
 
     <div class="section-title">Desempenho por Grupo de Espécies</div>
+
+    <div class="card glass-card species-card" style="margin-bottom:var(--gap)">
+      <h3>Espécies Nativas Predominantes — Destaque Dinâmico</h3>
+      <div class="subtitle">Angico, Aroeira e Cajueiro — espécies com maior representatividade do PRAD · destaque automático alternado</div>
+      <div class="showcase-grid" id="speciesShowcase"></div>
+    </div>
+
     <div class="grid-3">
       <div class="card glass-card">
         <h3>Espécies Nativas</h3>
@@ -733,6 +787,13 @@ tbody tr:hover{background:rgba(59,130,246,0.08);box-shadow:inset 0 0 20px rgba(5
   <div id="factors" class="tab-content">
 
     <div class="note"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Fatores supervenientes: eventos posteriores à implantação, imprevisíveis, sem nexo causal com falha técnica de execução (ABNT NBR ISO 31000; IBAMA, 2011). O contrato do PRAD prevê apenas controle de formigas cortadeiras — não contempla controle de herbívoros desfolhadores.</div>
+
+    <div class="card glass-card species-card pest-panel" style="margin-bottom:var(--gap)">
+      <h3 style="display:flex;align-items:center;gap:10px"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" style="color:var(--warning)"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Registro de Pragas / Herbivoria — Fator Superveniente Ocorrido</h3>
+      <div class="subtitle">Campanha 9 — Agosto/2026 · herbívoros desfolhadores associados ao fato superveniente (danos foliares e em brotações) · controle contratual restrito a formigas cortadeiras</div>
+      <div class="alert-banner warn"><span class="pulse-dot"></span> Alerta Fitossanitário — Herbivoria Registrada (fator superveniente em redução)</div>
+      <div class="pest-grid" id="pestGridCaraibas"></div>
+    </div>
 
     <div class="grid-2">
       <div class="card glass-card">
@@ -1226,6 +1287,57 @@ updateClock();
 updateDevStage(Math.floor((new Date()-IMPLANT_DATE)/86400000));
 setInterval(updateClock, 1000);
 setInterval(()=>updateDevStage(Math.floor((new Date()-IMPLANT_DATE)/86400000)), 60000);
+
+// ===================== SPECIES SHOWCASE & PEST ALERT (standard) =====================
+const SPECIES_CARAIBAS=[
+  {img:'assets/especies/angico.webp',name:'Angico',sci:'Anadenanthera colubrina'},
+  {img:'assets/especies/aroeira.webp',name:'Aroeira',sci:'Myracrodruon urundeuva'},
+  {img:'assets/especies/cajueiro.webp',name:'Cajueiro',sci:'Anacardium occidentale'}
+];
+function renderSpeciesShowcase(containerId){
+  const box=document.getElementById(containerId);
+  if(!box) return;
+  box.innerHTML=SPECIES_CARAIBAS.map((s,i)=>
+    `<div class="showcase-item ${i===0?'active':''}" data-i="${i}" onclick="setSpeciesSpotlight(${i})">
+       <img src="${s.img}" alt="${s.name}" loading="lazy">
+       <div class="cap"><b>${s.name}</b><span>${s.sci}</span></div>
+     </div>`).join('');
+}
+let spIdx=0;
+function setSpeciesSpotlight(idx){
+  const items=document.querySelectorAll('#speciesShowcase .showcase-item');
+  if(!items.length) return;
+  items.forEach(it=>it.classList.remove('active'));
+  items[idx].classList.add('active');
+  spIdx=idx;
+}
+renderSpeciesShowcase('speciesShowcase');
+setInterval(()=>{
+  const items=document.querySelectorAll('#speciesShowcase .showcase-item');
+  if(!items.length) return;
+  setSpeciesSpotlight((spIdx+1)%items.length);
+},3200);
+
+// Pragas — associadas ao fato superveniente ocorrido (herbivoria em redução)
+const PESTS_CARAIBAS=[
+  {img:'assets/pragas/gafanhoto.jpg',name:'Gafanhotos',sci:'Orthoptera · Acrididae',status:'Registrado',cls:'warn',alt:'Gafanhotos — desfolhação'},
+  {img:'assets/pragas/lagarta.webp',name:'Lagartas',sci:'Lepidoptera (desfolhadores)',status:'Registrado',cls:'warn',alt:'Lagartas — herbivoria em brotações'},
+  {img:'assets/pragas/bicho-pau.webp',name:'Bicho-pau',sci:'Phasmatodea',status:'Em monitoramento',cls:'watch',alt:'Bicho-pau — camuflado'},
+  {img:'assets/pragas/prea-moco.jpg',name:'Preá & Mocó',sci:'Rodentia · Caviidae (nativos)',status:'Em monitoramento',cls:'watch',alt:'Preá e Mocó — roedores nativos da Caatinga'}
+];
+function renderPestGrid(containerId,list){
+  const box=document.getElementById(containerId);
+  if(!box) return;
+  box.innerHTML=list.map(p=>
+    `<div class="pest-card ${p.cls==='warn'?'pest-alert':''}">
+       <img src="${p.img}" alt="${p.alt}" loading="lazy">
+       <div class="pest-body">
+         <b>${p.name}</b><span class="sci">${p.sci}</span>
+         <span class="pest-status ${p.cls}"><span class="sdot"></span>${p.status}</span>
+       </div>
+     </div>`).join('');
+}
+renderPestGrid('pestGridCaraibas',PESTS_CARAIBAS);
 </script>
 </body>
 </html>
