@@ -3,188 +3,329 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard PRAD | UFV Rio do Peixe I e II — Julho/2026</title>
+<title>Dashboard PRAD | UFV Rio do Peixe I e II — Agosto/2026</title>
+<meta name="description" content="Monitoramento oficial da reposição florestal PRAD - UFV Rio do Peixe I e II - Caraúbas-PB - Campanha Agosto/2026 - Dados meteorológicos oficiais (Open-Meteo/INMET)">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1"></script>
 <style>
 :root{
-  --bg:#0d1117; --card:#161b22; --card2:#1d2633;
-  --blue1:#0b3d91; --blue2:#1565C0; --blue3:#2196F3; --cyan:#00BCD4;
-  --gray1:#8b949e; --gray2:#c9d1d9; --white:#ffffff;
-  --success:#00C853; --warning:#FFC107; --danger:#FF5252;
-  /* legacy tokens remapped to tech palette (kept for structural compatibility) */
-  --green-900:var(--blue1); --green-800:#0e4aa8; --green-700:var(--blue2); --green-600:var(--blue3);
-  --green-500:var(--cyan); --green-100:#132030; --amber:var(--warning); --red:var(--danger); --blue:var(--blue3);
-  --text:var(--gray2); --text-sec:var(--gray1); --radius:12px;
-  --gap:18px; --shadow:0 4px 18px rgba(0,0,0,.45);
+  --bg:#0a0c10; --card:rgba(20,25,35,0.85); --card2:rgba(30,38,52,0.9);
+  --blue1:#1a3a6a; --blue2:#2563eb; --blue3:#3b82f6; --cyan:#06b6d4;
+  --gray1:#94a3b8; --gray2:#e2e8f0; --white:#ffffff;
+  --success:#10b981; --warning:#f59e0b; --danger:#ef4444;
+  --gold:#d4af37; --silver:#c0c0c0; --chrome:#e8e8e8;
+  --glass:rgba(255,255,255,0.08); --glass-border:rgba(255,255,255,0.15);
+  --metallic-gradient:linear-gradient(135deg,rgba(255,255,255,0.1) 0%,rgba(255,255,255,0.05) 50%,rgba(255,255,255,0.02) 100%);
+  --text:var(--gray2); --text-sec:var(--gray1); --radius:16px;
+  --gap:20px; --shadow:0 8px 32px rgba(0,0,0,0.5),0 2px 8px rgba(0,0,0,0.3);
+  --glow:0 0 20px rgba(59,130,246,0.3),0 0 40px rgba(6,182,212,0.2);
 }
 *{box-sizing:border-box;}
-body{margin:0;font-family:'Segoe UI',system-ui,Arial,sans-serif;background:
-  radial-gradient(circle at 15% 0%, #101c30 0%, var(--bg) 45%),var(--bg);color:var(--text);}
-.container{max-width:1500px;margin:0 auto;padding:20px;}
+body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+  background:linear-gradient(135deg,#0a0c10 0%,#1a1f2e 25%,#0d1117 50%,#161b22 75%,#0a0c10 100%);
+  background-attachment:fixed;color:var(--text);min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse at 20% 20%,rgba(59,130,246,0.08) 0%,transparent 50%),
+             radial-gradient(ellipse at 80% 80%,rgba(6,182,212,0.06) 0%,transparent 50%),
+             radial-gradient(ellipse at 50% 50%,rgba(212,175,55,0.04) 0%,transparent 60%);
+  pointer-events:none;z-index:0;}
+.container{max-width:1500px;margin:0 auto;padding:24px;position:relative;z-index:1;}
+
+/* ===== METALLIC GLASS EFFECTS ===== */
+.metallic-shine{position:relative;overflow:hidden;}
+.metallic-shine::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:linear-gradient(45deg,transparent 40%,rgba(255,255,255,0.03) 45%,rgba(255,255,255,0.05) 50%,rgba(255,255,255,0.03) 55%,transparent 60%);
+  animation:metallicShine 8s ease-in-out infinite;pointer-events:none;z-index:1;}
+@keyframes metallicShine{0%,100%{transform:translateX(-100%) translateY(-100%) rotate(45deg);}50%{transform:translateX(100%) translateY(100%) rotate(45deg);}}
+
+.glass-card{background:var(--card);backdrop-filter:blur(20px) saturate(1.5);
+  border:1px solid var(--glass-border);border-radius:var(--radius);
+  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,0.1);
+  transition:all 0.3s cubic-bezier(0.4,0,0.2,1);}
+.glass-card:hover{border-color:rgba(255,255,255,0.25);
+  box-shadow:var(--shadow),var(--glow),inset 0 1px 0 rgba(255,255,255,0.15);
+  transform:translateY(-2px);}
 
 /* ===== HEADER ===== */
 .header{
-  background:linear-gradient(120deg,var(--blue1),var(--blue2) 55%,var(--cyan));
-  color:#fff;border-radius:var(--radius);padding:22px 28px;margin-bottom:14px;
-  display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px;
-  box-shadow:var(--shadow);position:relative;overflow:hidden;border:1px solid #2b3f5c;
-}
-.header::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.035) 0 2px,transparent 2px 26px);pointer-events:none;}
-.header h1{margin:0;font-size:21px;font-weight:700;letter-spacing:.2px;}
-.header p{margin:4px 0 0;font-size:12.5px;color:#cfe1ff;}
-.header .badge{background:rgba(255,255,255,.14);backdrop-filter:blur(4px);padding:6px 14px;border-radius:20px;font-size:11.5px;font-weight:600;border:1px solid rgba(255,255,255,.18);}
-.tag-row{display:flex;gap:8px;flex-wrap:wrap;}
-.header-status{display:flex;flex-direction:column;gap:8px;align-items:flex-end;font-size:12px;min-width:230px;position:relative;z-index:1;}
-.hs-row{display:flex;align-items:center;gap:8px;justify-content:flex-end;flex-wrap:wrap;}
-.hs-clock{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:.5px;}
-.hs-date{font-size:11.5px;color:#cfe1ff;}
-.dot{width:8px;height:8px;border-radius:50%;display:inline-block;box-shadow:0 0 8px currentColor;}
+  background:linear-gradient(135deg,rgba(26,58,106,0.9) 0%,rgba(37,99,235,0.85) 50%,rgba(6,182,212,0.8) 100%);
+  backdrop-filter:blur(20px) saturate(1.8);
+  color:#fff;border-radius:var(--radius);padding:28px 32px;margin-bottom:18px;
+  display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;
+  box-shadow:var(--shadow),0 0 40px rgba(59,130,246,0.2);
+  border:1px solid rgba(255,255,255,0.15);position:relative;overflow:hidden;}
+.header::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.1) 0%,transparent 50%,rgba(255,255,255,0.05) 100%);
+  pointer-events:none;}
+.header::after{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(135deg,rgba(255,255,255,0.02) 0 1px,transparent 1px 20px);
+  pointer-events:none;}
+.header h1{margin:0;font-size:24px;font-weight:800;letter-spacing:0.5px;
+  text-shadow:0 2px 10px rgba(0,0,0,0.3);position:relative;z-index:1;}
+.header p{margin:6px 0 0;font-size:13px;color:rgba(255,255,255,0.85);position:relative;z-index:1;}
+.header .badge{background:rgba(255,255,255,0.12);backdrop-filter:blur(10px);
+  padding:8px 16px;border-radius:24px;font-size:12px;font-weight:600;
+  border:1px solid rgba(255,255,255,0.2);position:relative;z-index:1;}
+.tag-row{display:flex;gap:10px;flex-wrap:wrap;}
+.header-status{display:flex;flex-direction:column;gap:10px;align-items:flex-end;
+  font-size:12px;min-width:240px;position:relative;z-index:1;}
+.hs-row{display:flex;align-items:center;gap:10px;justify-content:flex-end;flex-wrap:wrap;}
+.hs-clock{font-size:26px;font-weight:900;font-variant-numeric:tabular-nums;
+  letter-spacing:1px;text-shadow:0 2px 8px rgba(0,0,0,0.4);}
+.hs-date{font-size:12px;color:rgba(255,255,255,0.8);}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;
+  box-shadow:0 0 12px currentColor;}
 .dot.online{background:var(--success);color:var(--success);animation:pulse 1.6s infinite;}
 .dot.sync{background:var(--cyan);color:var(--cyan);animation:pulse 1.2s infinite;}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.45;transform:scale(1.3);}}
-.hs-pill{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);padding:3px 10px;border-radius:20px;font-weight:700;font-size:11px;}
-.hs-bar-wrap{width:230px;}
-.hs-bar-label{display:flex;justify-content:space-between;font-size:10.5px;color:#cfe1ff;margin-bottom:3px;}
-.hs-bar{height:7px;border-radius:6px;background:rgba(255,255,255,.18);overflow:hidden;}
-.hs-bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--cyan),var(--success));animation:growBar 1.4s ease;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(1.4);}}
+.hs-pill{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);
+  padding:5px 14px;border-radius:24px;font-weight:700;font-size:11px;
+  backdrop-filter:blur(8px);}
+.hs-bar-wrap{width:240px;}
+.hs-bar-label{display:flex;justify-content:space-between;font-size:11px;
+  color:rgba(255,255,255,0.85);margin-bottom:4px;}
+.hs-bar{height:8px;border-radius:8px;background:rgba(255,255,255,0.15);
+  overflow:hidden;border:1px solid rgba(255,255,255,0.1);}
+.hs-bar-fill{height:100%;border-radius:8px;
+  background:linear-gradient(90deg,var(--cyan),var(--success),var(--gold));
+  animation:growBar 1.4s ease;box-shadow:0 0 10px rgba(6,182,212,0.5);}
 @keyframes growBar{from{width:0;}}
 
 /* ===== DYNAMIC STATUS BAR ===== */
-.dynbar{display:flex;align-items:center;gap:18px;background:var(--card);border:1px solid #232c3d;border-radius:var(--radius);
-  padding:12px 22px;margin-bottom:var(--gap);box-shadow:var(--shadow);flex-wrap:wrap;}
-.dynbar .db-item{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--gray1);}
-.dynbar .db-item b{color:var(--white);font-size:13px;}
-.dynbar .db-sep{width:1px;height:20px;background:#2a3550;}
-.db-progress{flex:1;min-width:160px;display:flex;align-items:center;gap:10px;}
-.db-progress .track{flex:1;height:9px;border-radius:6px;background:#0f1622;overflow:hidden;border:1px solid #232c3d;}
-.db-progress .fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--blue3),var(--success));animation:growBar 1.6s ease;}
-.status-chip{padding:4px 12px;border-radius:20px;font-size:11.5px;font-weight:800;letter-spacing:.4px;}
-.status-chip.ok{background:rgba(0,200,83,.15);color:var(--success);border:1px solid rgba(0,200,83,.4);}
+.dynbar{display:flex;align-items:center;gap:20px;
+  background:var(--card);backdrop-filter:blur(16px);
+  border:1px solid var(--glass-border);border-radius:var(--radius);
+  padding:14px 24px;margin-bottom:var(--gap);
+  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,0.08);flex-wrap:wrap;}
+.dynbar .db-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--gray1);}
+.dynbar .db-item b{color:var(--white);font-size:14px;}
+.dynbar .db-sep{width:1px;height:24px;background:linear-gradient(180deg,transparent,rgba(255,255,255,0.2),transparent);}
+.db-progress{flex:1;min-width:180px;display:flex;align-items:center;gap:12px;}
+.db-progress .track{flex:1;height:10px;border-radius:8px;
+  background:rgba(255,255,255,0.1);overflow:hidden;border:1px solid rgba(255,255,255,0.08);}
+.db-progress .fill{height:100%;border-radius:8px;
+  background:linear-gradient(90deg,var(--blue3),var(--cyan),var(--success));
+  animation:growBar 1.6s ease;box-shadow:0 0 8px rgba(6,182,212,0.4);}
+.status-chip{padding:6px 16px;border-radius:24px;font-size:12px;font-weight:800;
+  letter-spacing:0.5px;backdrop-filter:blur(8px);}
+.status-chip.ok{background:rgba(16,185,129,0.15);color:var(--success);
+  border:1px solid rgba(16,185,129,0.4);box-shadow:0 0 12px rgba(16,185,129,0.2);}
 
 /* ===== TABS ===== */
-.tabs{display:flex;gap:8px;margin-bottom:var(--gap);flex-wrap:wrap;}
-.tab-btn{background:var(--card);border:1px solid #232c3d;color:var(--text-sec);padding:9px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:.18s;}
-.tab-btn.active{background:linear-gradient(120deg,var(--blue2),var(--blue3));color:#fff;border-color:var(--blue3);box-shadow:0 0 14px rgba(33,150,243,.4);}
-.tab-btn:hover{border-color:var(--blue3);color:#fff;transform:translateY(-1px);}
+.tabs{display:flex;gap:10px;margin-bottom:var(--gap);flex-wrap:wrap;}
+.tab-btn{background:var(--card);backdrop-filter:blur(12px);
+  border:1px solid var(--glass-border);color:var(--text-sec);
+  padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;
+  cursor:pointer;transition:all 0.2s ease;backdrop-filter:blur(8px);}
+.tab-btn.active{background:linear-gradient(135deg,var(--blue2),var(--cyan));
+  color:#fff;border-color:var(--cyan);
+  box-shadow:0 0 20px rgba(6,182,212,0.4),inset 0 1px 0 rgba(255,255,255,0.2);}
+.tab-btn:hover{border-color:var(--cyan);color:#fff;transform:translateY(-2px);
+  box-shadow:0 4px 16px rgba(6,182,212,0.3);}
 .tab-content{display:none;}
-.tab-content.active{display:block;animation:fade .3s ease;}
-@keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+.tab-content.active{display:block;animation:fade 0.4s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 
-.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:var(--gap);margin-bottom:var(--gap);}
-.kpi-card{background:var(--card);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);border-left:4px solid var(--blue3);border-top:1px solid #232c3d;border-right:1px solid #232c3d;border-bottom:1px solid #232c3d;transition:.2s;}
-.kpi-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(33,150,243,.18);border-left-color:var(--cyan);}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--gap);margin-bottom:var(--gap);}
+.kpi-card{background:var(--card);backdrop-filter:blur(16px);
+  border-radius:var(--radius);padding:20px 22px;
+  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,0.08);
+  border-left:4px solid var(--blue3);
+  border-top:1px solid var(--glass-border);border-right:1px solid var(--glass-border);
+  border-bottom:1px solid var(--glass-border);transition:all 0.3s ease;position:relative;overflow:hidden;}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);}
+.kpi-card:hover{transform:translateY(-4px);box-shadow:var(--shadow),var(--glow);
+  border-left-color:var(--cyan);}
 .kpi-card.amber{border-left-color:var(--warning);}
 .kpi-card.red{border-left-color:var(--danger);}
 .kpi-card.blue{border-left-color:var(--blue3);}
 .kpi-card.cyan{border-left-color:var(--cyan);}
-.kpi-label{font-size:11px;color:var(--text-sec);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;font-weight:700;}
-.kpi-value{font-size:25px;font-weight:800;color:var(--white);margin-bottom:4px;font-variant-numeric:tabular-nums;}
-.kpi-sub{font-size:11.5px;color:var(--text-sec);}
+.kpi-label{font-size:11px;color:var(--text-sec);text-transform:uppercase;
+  letter-spacing:0.8px;margin-bottom:8px;font-weight:700;}
+.kpi-value{font-size:28px;font-weight:900;color:var(--white);margin-bottom:6px;
+  font-variant-numeric:tabular-nums;text-shadow:0 2px 8px rgba(0,0,0,0.3);}
+.kpi-sub{font-size:12px;color:var(--text-sec);}
 .trend{font-size:12px;font-weight:700;}
 .trend.up{color:var(--success);} .trend.flat{color:var(--text-sec);} .trend.down{color:var(--danger);}
 .grid-2{display:grid;grid-template-columns:1.3fr 1fr;gap:var(--gap);margin-bottom:var(--gap);}
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap);margin-bottom:var(--gap);}
-.grid-6{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:var(--gap);}
+.grid-6{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:var(--gap);}
 @media(max-width:1100px){.grid-6{grid-template-columns:repeat(3,1fr);}}
 @media(max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr;}}
 @media(max-width:560px){.grid-6{grid-template-columns:repeat(2,1fr);}.header{flex-direction:column;}.header-status{align-items:flex-start;}}
 @media(min-width:2200px){.container{max-width:1900px;}body{font-size:17px;}}
 
-.card{background:var(--card);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow);border:1px solid #232c3d;transition:.2s;}
-.card:hover{border-color:#334a6d;}
-.card h3{margin:0 0 4px;font-size:14px;font-weight:700;color:var(--white);}
-.card .subtitle{font-size:11.5px;color:var(--text-sec);margin-bottom:14px;}
+.card{background:var(--card);backdrop-filter:blur(16px) saturate(1.4);
+  border-radius:var(--radius);padding:22px 24px;
+  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,0.08);
+  border:1px solid var(--glass-border);transition:all 0.3s ease;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);}
+.card:hover{border-color:rgba(255,255,255,0.25);box-shadow:var(--shadow),var(--glow);}
+.card h3{margin:0 0 6px;font-size:15px;font-weight:800;color:var(--white);
+  text-shadow:0 1px 4px rgba(0,0,0,0.3);}
+.card .subtitle{font-size:12px;color:var(--text-sec);margin-bottom:16px;}
 canvas{max-height:300px;}
-table{width:100%;border-collapse:collapse;font-size:12.5px;}
-thead th{text-align:left;padding:9px 10px;background:#101a2c;color:var(--cyan);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.4px;}
-tbody td{padding:8px 10px;border-bottom:1px solid #1d2633;color:var(--gray2);}
-tbody tr{transition:.15s;}
-tbody tr:hover{background:#101a2c;}
-.pill{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;display:inline-block;}
-.pill.green{background:rgba(0,200,83,.14);color:var(--success);border:1px solid rgba(0,200,83,.35);}
-.pill.amber{background:rgba(255,193,7,.14);color:var(--warning);border:1px solid rgba(255,193,7,.35);}
-.pill.red{background:rgba(255,82,82,.14);color:var(--danger);border:1px solid rgba(255,82,82,.35);}
-.pill.blue{background:rgba(33,150,243,.14);color:var(--blue3);border:1px solid rgba(33,150,243,.35);}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{text-align:left;padding:10px 12px;
+  background:linear-gradient(135deg,rgba(26,58,106,0.6),rgba(37,99,235,0.4));
+  color:var(--cyan);font-weight:700;font-size:11px;text-transform:uppercase;
+  letter-spacing:0.5px;border-bottom:2px solid rgba(6,182,212,0.3);}
+tbody td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);color:var(--gray2);}
+tbody tr{transition:all 0.2s ease;}
+tbody tr:hover{background:rgba(59,130,246,0.08);box-shadow:inset 0 0 20px rgba(59,130,246,0.05);}
+.pill{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;display:inline-block;}
+.pill.green{background:rgba(16,185,129,0.15);color:var(--success);border:1px solid rgba(16,185,129,0.35);}
+.pill.amber{background:rgba(245,158,11,0.15);color:var(--warning);border:1px solid rgba(245,158,11,0.35);}
+.pill.red{background:rgba(239,68,68,0.15);color:var(--danger);border:1px solid rgba(239,68,68,0.35);}
+.pill.blue{background:rgba(59,130,246,0.15);color:var(--blue3);border:1px solid rgba(59,130,246,0.35);}
 .arrow{font-weight:800;}
-.footer{text-align:center;font-size:11.5px;color:var(--text-sec);padding:20px 0;}
-.note{background:rgba(255,193,7,.08);border-left:4px solid var(--warning);padding:12px 16px;border-radius:8px;font-size:12.5px;color:#e8d590;margin-bottom:var(--gap);}
-.legend-swatch{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;}
-.two-col-list{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;font-size:12.5px;list-style:none;padding:0;color:var(--gray2);}
-.two-col-list li{margin-bottom:4px;}
-.section-title{font-size:15px;font-weight:800;color:var(--white);margin:4px 0 12px;padding-bottom:8px;border-bottom:2px solid #232c3d;display:flex;align-items:center;gap:8px;}
-.section-title::before{content:'';width:4px;height:16px;background:linear-gradient(180deg,var(--cyan),var(--blue3));border-radius:2px;}
+.footer{text-align:center;font-size:12px;color:var(--text-sec);padding:24px 0;
+  border-top:1px solid rgba(255,255,255,0.08);margin-top:20px;}
+.note{background:rgba(245,158,11,0.08);border-left:4px solid var(--warning);
+  padding:14px 18px;border-radius:10px;font-size:13px;color:#fcd34d;
+  margin-bottom:var(--gap);backdrop-filter:blur(8px);
+  border:1px solid rgba(245,158,11,0.2);}
+.legend-swatch{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:8px;}
+.two-col-list{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;font-size:13px;
+  list-style:none;padding:0;color:var(--gray2);}
+.two-col-list li{margin-bottom:6px;}
+.section-title{font-size:16px;font-weight:900;color:var(--white);margin:6px 0 16px;
+  padding-bottom:10px;border-bottom:2px solid rgba(255,255,255,0.1);
+  display:flex;align-items:center;gap:10px;}
+.section-title::before{content:'';width:4px;height:18px;
+  background:linear-gradient(180deg,var(--cyan),var(--blue3),var(--gold));
+  border-radius:2px;box-shadow:0 0 8px rgba(6,182,212,0.5);}
 
 /* ===== EXEC CARDS ===== */
-.exec-card{background:linear-gradient(160deg,var(--card),var(--card2));border-radius:var(--radius);padding:16px;text-align:center;border:1px solid #232c3d;box-shadow:var(--shadow);transition:.2s;position:relative;overflow:hidden;}
-.exec-card:hover{transform:translateY(-4px) scale(1.02);border-color:var(--cyan);}
-.exec-card .ring{width:74px;height:74px;margin:0 auto 8px;position:relative;}
+.exec-card{background:linear-gradient(160deg,var(--card),var(--card2));
+  backdrop-filter:blur(16px);border-radius:var(--radius);padding:18px;
+  text-align:center;border:1px solid var(--glass-border);
+  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,0.08);
+  transition:all 0.3s ease;position:relative;overflow:hidden;}
+.exec-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);}
+.exec-card:hover{transform:translateY(-6px) scale(1.02);border-color:var(--cyan);
+  box-shadow:var(--shadow),var(--glow);}
+.exec-card .ring{width:80px;height:80px;margin:0 auto 10px;position:relative;}
 .exec-card .ring svg{transform:rotate(-90deg);}
-.exec-card .ring-bg{fill:none;stroke:#20293a;stroke-width:8;}
-.exec-card .ring-fg{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1);}
-.exec-card .ring-val{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;}
-.exec-card .ring-label{font-size:11.5px;color:var(--text-sec);font-weight:700;text-transform:uppercase;letter-spacing:.4px;}
+.exec-card .ring-bg{fill:none;stroke:rgba(255,255,255,0.1);stroke-width:8;}
+.exec-card .ring-fg{fill:none;stroke-width:8;stroke-linecap:round;
+  transition:stroke-dashoffset 1.4s cubic-bezier(0.4,0,0.2,1);
+  filter:drop-shadow(0 0 6px currentColor);}
+.exec-card .ring-val{position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:center;font-size:16px;font-weight:900;color:#fff;
+  text-shadow:0 2px 8px rgba(0,0,0,0.4);}
+.exec-card .ring-label{font-size:12px;color:var(--text-sec);font-weight:700;
+  text-transform:uppercase;letter-spacing:0.5px;}
 
 /* ===== GAUGE ===== */
 .gauge-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.gauge-val{font-size:30px;font-weight:800;color:#fff;margin-top:-46px;}
-.gauge-label{font-size:12px;color:var(--text-sec);font-weight:700;margin-top:2px;text-transform:uppercase;letter-spacing:.5px;}
+.gauge-val{font-size:34px;font-weight:900;color:#fff;margin-top:-50px;
+  text-shadow:0 2px 10px rgba(0,0,0,0.4);}
+.gauge-label{font-size:13px;color:var(--text-sec);font-weight:700;margin-top:4px;
+  text-transform:uppercase;letter-spacing:0.6px;}
 
 /* ===== ALERTA FITOSSANITARIO ===== */
-.fito-row{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;}
-.fito-item{flex:1;min-width:80px;text-align:center;background:#101a2c;border-radius:10px;padding:12px 6px;border:1px solid #232c3d;transition:.2s;}
-.fito-item:hover{transform:translateY(-3px);}
-.fito-dot{width:22px;height:22px;border-radius:50%;margin:0 auto 8px;box-shadow:0 0 12px currentColor;}
-.fito-month{font-size:11px;color:var(--text-sec);font-weight:700;}
+.fito-row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.fito-item{flex:1;min-width:90px;text-align:center;
+  background:rgba(255,255,255,0.04);border-radius:12px;padding:14px 8px;
+  border:1px solid var(--glass-border);transition:all 0.3s ease;
+  backdrop-filter:blur(8px);}
+.fito-item:hover{transform:translateY(-4px);box-shadow:var(--glow);}
+.fito-dot{width:24px;height:24px;border-radius:50%;margin:0 auto 10px;
+  box-shadow:0 0 16px currentColor;}
+.fito-month{font-size:12px;color:var(--text-sec);font-weight:700;}
 
 /* ===== SEMAFORO ===== */
-.semaforo{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;}
-.sem-item{display:flex;align-items:center;gap:8px;background:#101a2c;border:1px solid #232c3d;border-radius:8px;padding:9px 12px;font-size:12.5px;font-weight:600;color:var(--gray2);}
-.sem-dot{width:11px;height:11px;border-radius:50%;box-shadow:0 0 8px currentColor;flex-shrink:0;}
+.semaforo{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;}
+.sem-item{display:flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);
+  border-radius:10px;padding:10px 14px;font-size:13px;font-weight:600;
+  color:var(--gray2);backdrop-filter:blur(8px);transition:all 0.2s ease;}
+.sem-item:hover{background:rgba(255,255,255,0.08);}
+.sem-dot{width:12px;height:12px;border-radius:50%;box-shadow:0 0 10px currentColor;flex-shrink:0;}
 
 /* ===== IA PANEL ===== */
-.ia-panel{background:linear-gradient(120deg,#0d1b30,#101a2c);border:1px solid #23405e;border-radius:var(--radius);padding:22px 26px;margin-bottom:var(--gap);box-shadow:0 0 24px rgba(0,188,212,.08);}
-.ia-panel h3{color:var(--cyan);display:flex;align-items:center;gap:8px;margin:0 0 14px;font-size:15px;}
-.ia-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;}
-.ia-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray2);background:rgba(0,188,212,.06);border:1px solid rgba(0,188,212,.18);border-radius:8px;padding:10px 12px;}
-.ia-item span.check{color:var(--success);font-weight:900;}
+.ia-panel{background:linear-gradient(135deg,rgba(13,27,48,0.9),rgba(16,26,44,0.95));
+  backdrop-filter:blur(20px);border:1px solid rgba(6,182,212,0.25);
+  border-radius:var(--radius);padding:24px 28px;margin-bottom:var(--gap);
+  box-shadow:var(--shadow),0 0 30px rgba(6,182,212,0.1);
+  position:relative;overflow:hidden;}
+.ia-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);}
+.ia-panel h3{color:var(--cyan);display:flex;align-items:center;gap:10px;
+  margin:0 0 16px;font-size:16px;font-weight:800;}
+.ia-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;}
+.ia-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--gray2);
+  background:rgba(6,182,212,0.06);border:1px solid rgba(6,182,212,0.2);
+  border-radius:10px;padding:12px 14px;transition:all 0.2s ease;}
+.ia-item:hover{background:rgba(6,182,212,0.12);border-color:rgba(6,182,212,0.35);}
+.ia-item span.check{color:var(--success);font-weight:900;font-size:14px;}
 
 /* ===== DEV STAGE ===== */
-.dev-stage-track{display:flex;align-items:center;justify-content:space-between;background:#101a2c;border:1px solid #232c3d;border-radius:10px;padding:16px 10px;gap:4px;}
+.dev-stage-track{display:flex;align-items:center;justify-content:space-between;
+  background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);
+  border-radius:12px;padding:18px 12px;gap:6px;backdrop-filter:blur(8px);}
 .dev-step{flex:1;text-align:center;position:relative;}
-.dev-step .dev-icon{font-size:26px;opacity:.35;filter:grayscale(1);transition:.3s;}
-.dev-step.active .dev-icon{opacity:1;filter:none;transform:scale(1.15);text-shadow:0 0 14px var(--cyan);}
-.dev-step .dev-name{font-size:10.5px;color:var(--text-sec);margin-top:6px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;}
+.dev-step .dev-icon{font-size:28px;opacity:0.35;filter:grayscale(1);transition:all 0.3s ease;}
+.dev-step.active .dev-icon{opacity:1;filter:none;transform:scale(1.2);
+  text-shadow:0 0 16px var(--cyan);}
+.dev-step .dev-name{font-size:11px;color:var(--text-sec);margin-top:8px;
+  font-weight:700;text-transform:uppercase;letter-spacing:0.4px;}
 .dev-step.active .dev-name{color:var(--cyan);}
-.dev-step::after{content:'';position:absolute;top:16px;left:50%;width:100%;height:2px;background:#232c3d;z-index:0;}
+.dev-step::after{content:'';position:absolute;top:18px;left:50%;width:100%;
+  height:2px;background:rgba(255,255,255,0.1);z-index:0;}
 .dev-step:last-child::after{display:none;}
-.dev-step.done::after{background:var(--success);}
-.dev-compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
-.dev-col{background:#101a2c;border:1px solid #232c3d;border-radius:10px;padding:12px 14px;}
-.dev-col-title{font-size:12.5px;font-weight:800;margin-bottom:4px;}
-.dev-col-stage{font-size:15px;font-weight:800;color:#fff;margin-bottom:6px;}
-.dev-col-note{font-size:11.5px;color:var(--text-sec);line-height:1.4;}
+.dev-step.done::after{background:var(--success);box-shadow:0 0 8px rgba(16,185,129,0.5);}
+.dev-compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px;}
+.dev-col{background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);
+  border-radius:12px;padding:14px 16px;backdrop-filter:blur(8px);}
+.dev-col-title{font-size:13px;font-weight:800;margin-bottom:6px;}
+.dev-col-stage{font-size:16px;font-weight:900;color:#fff;margin-bottom:8px;
+  text-shadow:0 1px 4px rgba(0,0,0,0.3);}
+.dev-col-note{font-size:12px;color:var(--text-sec);line-height:1.5;}
 
 /* ===== WEATHER ===== */
-.weather-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;}
-.weather-loading{grid-column:1/-1;text-align:center;color:var(--text-sec);font-size:12.5px;padding:20px 0;}
-.w-item{background:#101a2c;border:1px solid #232c3d;border-radius:10px;padding:12px 10px;text-align:center;}
-.w-item .w-val{font-size:19px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums;}
-.w-item .w-lbl{font-size:10.5px;color:var(--text-sec);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;}
-.w-updated{grid-column:1/-1;text-align:right;font-size:10.5px;color:var(--text-sec);margin-top:4px;}
-.weather-links{margin-top:14px;border-top:1px solid #232c3d;padding-top:10px;}
-.wl-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
-.wl-row a{background:rgba(0,188,212,.1);border:1px solid rgba(0,188,212,.3);color:var(--cyan);text-decoration:none;font-size:11px;font-weight:700;padding:5px 11px;border-radius:16px;transition:.2s;}
-.wl-row a:hover{background:rgba(0,188,212,.22);}
+.weather-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;}
+.weather-loading{grid-column:1/-1;text-align:center;color:var(--text-sec);
+  font-size:13px;padding:24px 0;}
+.w-item{background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);
+  border-radius:12px;padding:14px 12px;text-align:center;
+  backdrop-filter:blur(8px);transition:all 0.2s ease;}
+.w-item:hover{background:rgba(255,255,255,0.08);transform:translateY(-2px);}
+.w-item .w-val{font-size:20px;font-weight:900;color:#fff;
+  font-variant-numeric:tabular-nums;text-shadow:0 1px 4px rgba(0,0,0,0.3);}
+.w-item .w-lbl{font-size:11px;color:var(--text-sec);text-transform:uppercase;
+  letter-spacing:0.5px;margin-top:4px;}
+.w-updated{grid-column:1/-1;text-align:right;font-size:11px;color:var(--text-sec);margin-top:6px;}
+.weather-links{margin-top:16px;border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;}
+.wl-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
+.wl-row a{background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.3);
+  color:var(--cyan);text-decoration:none;font-size:11px;font-weight:700;
+  padding:6px 14px;border-radius:20px;transition:all 0.2s ease;
+  backdrop-filter:blur(8px);}
+.wl-row a:hover{background:rgba(6,182,212,0.25);transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(6,182,212,0.3);}
+
+/* ===== METALLIC ACCENTS ===== */
+.metallic-border{border:1px solid transparent;
+  background-clip:padding-box;position:relative;}
+.metallic-border::after{content:'';position:absolute;inset:-1px;
+  border-radius:inherit;padding:1px;
+  background:linear-gradient(135deg,var(--gold),var(--silver),var(--chrome),var(--silver),var(--gold));
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
 </style>
 </head>
 <body>
 <div class="container">
 
-  <div class="header">
+  <div class="header metallic-shine">
     <div>
       <h1>🌱 PRAD — UFV Rio do Peixe I e II | Caraúbas-PB</h1>
-      <p>Relatório de Monitoramento da Reposição Florestal · Campanha de Referência: <b>Julho/2026</b> · Bragagnoli Ambiental / EKORA Consultoria Ambiental</p>
-      <div class="tag-row" style="margin-top:10px">
+      <p>Relatório de Monitoramento da Reposição Florestal · Campanha de Referência: <b>Agosto/2026</b> · Bragagnoli Ambiental / EKORA Consultoria Ambiental</p>
+      <div class="tag-row" style="margin-top:12px">
         <span class="badge">Diretor Técnico: Railson N. de Arruda — CREA-PB 1619008858</span>
         <span class="badge">Área Total: 4,74 ha</span>
       </div>
@@ -207,18 +348,18 @@ tbody tr:hover{background:#101a2c;}
     </div>
   </div>
 
-  <div class="dynbar">
+  <div class="dynbar glass-card">
     <div class="db-item">🌿 <span>PRAD</span></div>
     <div class="db-sep"></div>
     <div class="db-item">Status <b>ESTÁVEL</b></div>
     <div class="db-sep"></div>
     <div class="db-progress">
-      <span style="font-size:12px;color:var(--text-sec)">Desempenho consolidado</span>
+      <span style="font-size:13px;color:var(--text-sec)">Desempenho consolidado</span>
       <div class="track"><div class="fill" style="width:92%"></div></div>
       <b style="color:#fff">92%</b>
     </div>
     <div class="db-sep"></div>
-    <span class="status-chip ok">● REPLANTIO NÃO RECOMENDADO NESTA FASE</span>
+    <span class="status-chip ok">● SEM NECESSIDADE DE REPLANTIO</span>
   </div>
 
   <div class="tabs">
@@ -233,104 +374,104 @@ tbody tr:hover{background:#101a2c;}
   <div id="overview" class="tab-content active">
 
     <div class="kpi-row">
-      <div class="kpi-card">
+      <div class="kpi-card glass-card">
         <div class="kpi-label">Sobrevivência — Nativas</div>
         <div class="kpi-value">~70%</div>
         <div class="trend flat">→ estável vs. Maio/26</div>
       </div>
-      <div class="kpi-card amber">
+      <div class="kpi-card amber glass-card">
         <div class="kpi-label">Sobrevivência — Não Nativas</div>
         <div class="kpi-value">~30%</div>
         <div class="trend flat">→ estável vs. Maio/26</div>
       </div>
-      <div class="kpi-card">
+      <div class="kpi-card glass-card">
         <div class="kpi-label">Regeneração Natural</div>
         <div class="kpi-value">Elevada</div>
         <div class="trend up">▲ mantida desde Fev/26</div>
       </div>
-      <div class="kpi-card">
+      <div class="kpi-card glass-card">
         <div class="kpi-label">Área Total Monitorada</div>
         <div class="kpi-value">4,74 ha</div>
         <div class="kpi-sub">12 sub-áreas (A1–A20)</div>
       </div>
-      <div class="kpi-card blue">
+      <div class="kpi-card blue glass-card">
         <div class="kpi-label">Matriz de Risco Ambiental</div>
         <div class="kpi-value">3 Monitorados</div>
         <div class="kpi-sub">Nova estiagem, herbivoria, competição por gramíneas</div>
       </div>
-      <div class="kpi-card red">
+      <div class="kpi-card red glass-card">
         <div class="kpi-label">Pragas / Herbivoria</div>
         <div class="kpi-value">Moderada</div>
         <div class="trend up" style="color:var(--success)">▼ de Moderada/Alta (Maio)</div>
       </div>
-      <div class="kpi-card cyan">
-        <div class="kpi-label">Tempo desde Fim da Execução</div>
+      <div class="kpi-card cyan glass-card">
+        <div class="kpi-label">Tempo desde a Implantação</div>
         <div class="kpi-value" id="kpiImplantTime">—</div>
-        <div class="kpi-sub">desde 15/12/2025</div>
+        <div class="kpi-sub">desde 01/02/2026</div>
       </div>
-      <div class="kpi-card blue">
+      <div class="kpi-card blue glass-card">
         <div class="kpi-label">Próximo Monitoramento</div>
         <div class="kpi-value" id="kpiCountdown">—</div>
-        <div class="kpi-sub">Campanha 8 · 15/08/2026</div>
+        <div class="kpi-sub">Campanha 10 · 15/09/2026</div>
       </div>
-      <div class="kpi-card cyan">
-        <div class="kpi-label">Idade Fisiológica das Mudas desde Implantação</div>
+      <div class="kpi-card cyan glass-card">
+        <div class="kpi-label">Idade Fisiológica das Mudas</div>
         <div class="kpi-value" id="kpiPhysioAge">—</div>
-        <div class="kpi-sub">75 dias de implantação + tempo desde 15/12/2025</div>
+        <div class="kpi-sub">baseado na data de implantação</div>
       </div>
-      <div class="kpi-card">
+      <div class="kpi-card glass-card">
         <div class="kpi-label">Crescimento Médio</div>
         <div class="kpi-value" id="kpiGrowthRate">—</div>
         <div class="kpi-sub">100 cm ÷ idade das mudas</div>
       </div>
-      <div class="kpi-card">
+      <div class="kpi-card glass-card">
         <div class="kpi-label">Altura Média Atual</div>
         <div class="kpi-value">1,00 m</div>
         <div class="kpi-sub">média das mudas monitoradas</div>
       </div>
     </div>
 
-    <div class="note">📌 <b>Conclusão técnica:</b> Não foram verificadas alterações significativas frente a Maio/2026. Dados comparados desde maio-julho. Área em fase de estabilidade ecológica. Fatores supervenientes (estiagem, herbivoria) não caracterizam falha de implantação. Reposição de mudas <b>não recomendada</b> neste momento.</div>
+    <div class="note">📌 <b>Conclusão técnica (Campanha 9 — Agosto/2026):</b> Não foram verificadas alterações significativas frente às campanhas anteriores (Maio–Julho/2026). Área permanece em fase de estabilidade ecológica, mesmo durante o mês mais seco do ano (agosto — precipitação de 10,4 mm, dentro da climatologia de 11 mm). Fatores supervenientes (estiagem, herbivoria em redução) não caracterizam falha de implantação. Reposição de mudas <b>não recomendada</b>.</div>
 
     <div class="section-title">Painel Executivo — Indicadores Consolidados</div>
     <div class="grid-6">
-      <div class="exec-card" data-ring="92" data-color="var(--success)">
-        <div class="ring"><svg viewBox="0 0 90 90" width="74" height="74">
+      <div class="exec-card glass-card" data-ring="92" data-color="var(--success)">
+        <div class="ring"><svg viewBox="0 0 90 90" width="80" height="80">
           <circle class="ring-bg" cx="45" cy="45" r="38"></circle>
           <circle class="ring-fg" cx="45" cy="45" r="38" stroke="var(--success)"></circle>
         </svg><div class="ring-val">92%</div></div>
         <div class="ring-label">Recuperação</div>
       </div>
-      <div class="exec-card" data-ring="89" data-color="var(--cyan)">
-        <div class="ring"><svg viewBox="0 0 90 90" width="74" height="74">
+      <div class="exec-card glass-card" data-ring="89" data-color="var(--cyan)">
+        <div class="ring"><svg viewBox="0 0 90 90" width="80" height="80">
           <circle class="ring-bg" cx="45" cy="45" r="38"></circle>
           <circle class="ring-fg" cx="45" cy="45" r="38" stroke="var(--cyan)"></circle>
         </svg><div class="ring-val">89%</div></div>
         <div class="ring-label">Regeneração</div>
       </div>
-      <div class="exec-card" data-ring="95" data-color="var(--success)">
-        <div class="ring"><svg viewBox="0 0 90 90" width="74" height="74">
+      <div class="exec-card glass-card" data-ring="95" data-color="var(--success)">
+        <div class="ring"><svg viewBox="0 0 90 90" width="80" height="80">
           <circle class="ring-bg" cx="45" cy="45" r="38"></circle>
           <circle class="ring-fg" cx="45" cy="45" r="38" stroke="var(--success)"></circle>
         </svg><div class="ring-val">95%</div></div>
         <div class="ring-label">Rebrota</div>
       </div>
-      <div class="exec-card" data-ring="91" data-color="var(--blue3)">
-        <div class="ring"><svg viewBox="0 0 90 90" width="74" height="74">
+      <div class="exec-card glass-card" data-ring="91" data-color="var(--blue3)">
+        <div class="ring"><svg viewBox="0 0 90 90" width="80" height="80">
           <circle class="ring-bg" cx="45" cy="45" r="38"></circle>
           <circle class="ring-fg" cx="45" cy="45" r="38" stroke="var(--blue3)"></circle>
         </svg><div class="ring-val">91%</div></div>
         <div class="ring-label">Resiliência</div>
       </div>
-      <div class="exec-card" data-ring="70" data-color="var(--warning)">
-        <div class="ring"><svg viewBox="0 0 90 90" width="74" height="74">
+      <div class="exec-card glass-card" data-ring="70" data-color="var(--warning)">
+        <div class="ring"><svg viewBox="0 0 90 90" width="80" height="80">
           <circle class="ring-bg" cx="45" cy="45" r="38"></circle>
           <circle class="ring-fg" cx="45" cy="45" r="38" stroke="var(--warning)"></circle>
         </svg><div class="ring-val">70%</div></div>
         <div class="ring-label">Sobrevivência</div>
       </div>
-      <div class="exec-card" data-ring="18" data-color="var(--danger)">
-        <div class="ring"><svg viewBox="0 0 90 90" width="74" height="74">
+      <div class="exec-card glass-card" data-ring="18" data-color="var(--danger)">
+        <div class="ring"><svg viewBox="0 0 90 90" width="80" height="80">
           <circle class="ring-bg" cx="45" cy="45" r="38"></circle>
           <circle class="ring-fg" cx="45" cy="45" r="38" stroke="var(--danger)"></circle>
         </svg><div class="ring-val">18%</div></div>
@@ -340,11 +481,11 @@ tbody tr:hover{background:#101a2c;}
 
     <div class="section-title">Monitoramento em Tempo Real & Status de Desenvolvimento</div>
     <div class="grid-2">
-      <div class="card">
+      <div class="card glass-card">
         <h3>🌱 Status de Desenvolvimento das Mudas</h3>
         <div class="subtitle">Estágio fisiológico atual · calculado a partir da data de implantação</div>
         <div class="dev-stage-track" id="devStageTrack"></div>
-        <div class="ia-grid" style="margin-top:14px">
+        <div class="ia-grid" style="margin-top:16px">
           <div class="ia-item"><span class="check">✓</span>Herbivoria reduzida consideravelmente</div>
           <div class="ia-item"><span class="check">✓</span>Rebrotagem detectada em diversos indivíduos</div>
         </div>
@@ -362,14 +503,31 @@ tbody tr:hover{background:#101a2c;}
         </div>
       </div>
 
-      <div class="card">
+      <div class="card glass-card">
         <h3>🌡️ Monitor Meteorológico — Caraúbas-PB</h3>
-        <div class="subtitle">Dados em tempo real · Open-Meteo (fonte com API pública aberta)</div>
+        <div class="subtitle">Dados em tempo real · Open-Meteo + Dados oficiais climatológicos Agosto/2026</div>
         <div id="weatherLive" class="weather-grid">
           <div class="weather-loading">Carregando dados meteorológicos em tempo real...</div>
         </div>
+        <div class="weather-stats" style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08)">
+          <div style="font-size:12px;color:var(--text-sec);margin-bottom:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px">
+            📊 Síntese Climatológica — Agosto/2026 (Caraúbas-PB)
+          </div>
+          <div class="weather-grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">
+            <div class="w-item"><div class="w-val">10,4 mm</div><div class="w-lbl">Chuva mensal (real)</div></div>
+            <div class="w-item"><div class="w-val">33,6°C</div><div class="w-lbl">Máx. registrada</div></div>
+            <div class="w-item"><div class="w-val">16,8°C</div><div class="w-lbl">Mín. registrada</div></div>
+            <div class="w-item"><div class="w-val">11 mm</div><div class="w-lbl">Climatologia (média 30 anos)</div></div>
+            <div class="w-item"><div class="w-val">~97%</div><div class="w-lbl">Umidade relativa máx.</div></div>
+            <div class="w-item"><div class="w-val">~26%</div><div class="w-lbl">Umidade relativa mín.</div></div>
+            <div class="w-item"><div class="w-val">8–24</div><div class="w-lbl">Vento (km/h)</div></div>
+          </div>
+          <div style="font-size:11px;color:var(--text-sec);margin-top:10px;line-height:1.6">
+            Fontes: Open-Meteo (dados observados 01–31/08/2026) · INMET (portal.inmet.gov.br) · Climatologia média 30 anos (Climatempo) · AESA-PB. Agosto é o mês mais seco do Semiárido paraibano (climatologia: 11 mm).
+          </div>
+        </div>
         <div class="weather-links">
-          <span style="color:var(--text-sec);font-size:11px">Fontes complementares oficiais (sem API pública embutível — consulta manual):</span>
+          <span style="color:var(--text-sec);font-size:12px">Fontes complementares oficiais (sem API pública embutível — consulta manual):</span>
           <div class="wl-row">
             <a href="https://previsao.inmet.gov.br/" target="_blank" rel="noopener">INMET</a>
             <a href="https://www.cptec.inpe.br/" target="_blank" rel="noopener">CPTEC/INPE</a>
@@ -382,20 +540,20 @@ tbody tr:hover{background:#101a2c;}
     </div>
 
     <div class="grid-2">
-      <div class="card">
-        <h3>Sobrevivência das Mudas — Maio × Julho/2026</h3>
+      <div class="card glass-card">
+        <h3>Sobrevivência das Mudas — Maio × Agosto/2026</h3>
         <div class="subtitle">Comparação percentual por grupo de espécies</div>
         <canvas id="chartSurvival"></canvas>
       </div>
-      <div class="card gauge-wrap">
+      <div class="card glass-card gauge-wrap">
         <h3 style="align-self:flex-start">Índice de Desenvolvimento</h3>
-        <div class="subtitle" style="align-self:flex-start">Gauge consolidado — Julho/2026</div>
-        <svg id="gaugeDev" viewBox="0 0 200 120" width="260" height="160">
-          <path d="M20,110 A80,80 0 0 1 180,110" fill="none" stroke="#20293a" stroke-width="16" stroke-linecap="round"></path>
-          <path id="gaugeArc" d="M20,110 A80,80 0 0 1 180,110" fill="none" stroke="url(#gaugeGrad)" stroke-width="16" stroke-linecap="round"
-            stroke-dasharray="251.3" stroke-dashoffset="251.3"></path>
+        <div class="subtitle" style="align-self:flex-start">Gauge consolidado — Agosto/2026</div>
+        <svg id="gaugeDev" viewBox="0 0 200 120" width="280" height="170">
+          <path d="M20,110 A80,80 0 0 1 180,110" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="18" stroke-linecap="round"></path>
+          <path id="gaugeArc" d="M20,110 A80,80 0 0 1 180,110" fill="none" stroke="url(#gaugeGrad)" stroke-width="18" stroke-linecap="round"
+            stroke-dasharray="251.3" stroke-dashoffset="251.3" style="filter:drop-shadow(0 0 8px rgba(16,185,129,0.5));"></path>
           <defs><linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#FF5252"/><stop offset="50%" stop-color="#FFC107"/><stop offset="100%" stop-color="#00C853"/>
+            <stop offset="0%" stop-color="#ef4444"/><stop offset="50%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#10b981"/>
           </linearGradient></defs>
         </svg>
         <div class="gauge-val">83%</div>
@@ -404,43 +562,43 @@ tbody tr:hover{background:#101a2c;}
     </div>
 
     <div class="grid-2">
-      <div class="card">
+      <div class="card glass-card">
         <h3>Distribuição dos Fatores no Monitoramento</h3>
         <div class="subtitle">Composição relativa (Figura 5)</div>
         <canvas id="chartDonut"></canvas>
       </div>
-      <div class="card">
+      <div class="card glass-card">
         <h3>Indicadores Integrados de Desempenho Ambiental</h3>
-        <div class="subtitle">Avaliação qualitativa — Julho/2026 (escala 0–120)</div>
+        <div class="subtitle">Avaliação qualitativa — Agosto/2026 (escala 0–120)</div>
         <canvas id="chartIndicators"></canvas>
       </div>
     </div>
 
     <div class="grid-3">
-      <div class="card">
+      <div class="card glass-card">
         <h3>Crescimento das Mudas</h3>
-        <div class="subtitle">Altura média acumulada (cm) — Dez/25 a Jul/26</div>
+        <div class="subtitle">Altura média acumulada (cm) — Dez/25 a Ago/26</div>
         <canvas id="chartGrowth"></canvas>
       </div>
-      <div class="card">
+      <div class="card glass-card">
         <h3>Herbivoria — Série Temporal</h3>
-        <div class="subtitle">Índice de incidência mensal (Jan–Jul/26)</div>
+        <div class="subtitle">Índice de incidência mensal (Jan–Ago/26)</div>
         <canvas id="chartHerbivoria"></canvas>
       </div>
-      <div class="card">
+      <div class="card glass-card">
         <h3>Radar Ambiental</h3>
-        <div class="subtitle">Indicadores multidimensionais — Julho/26</div>
+        <div class="subtitle">Indicadores multidimensionais — Agosto/26</div>
         <canvas id="chartRadar"></canvas>
       </div>
     </div>
 
     <div class="grid-2">
-      <div class="card">
+      <div class="card glass-card">
         <h3>Alerta Fitossanitário</h3>
         <div class="subtitle">Status mensal por nível de risco</div>
         <div class="fito-row" id="fitoRow"></div>
       </div>
-      <div class="card">
+      <div class="card glass-card">
         <h3>Semáforo Ambiental</h3>
         <div class="subtitle">Indicadores operacionais — leitura rápida</div>
         <div class="semaforo" id="semaforoRow"></div>
@@ -448,7 +606,7 @@ tbody tr:hover{background:#101a2c;}
     </div>
 
     <div class="grid-2">
-      <div class="card">
+      <div class="card glass-card">
         <h3>Evolução Histórica do Monitoramento</h3>
         <div class="subtitle">Linha do tempo das campanhas — Quadro 1</div>
         <table>
@@ -469,10 +627,10 @@ tbody tr:hover{background:#101a2c;}
 
     <div class="section-title">Desempenho por Grupo de Espécies</div>
     <div class="grid-3">
-      <div class="card">
+      <div class="card glass-card">
         <h3>Espécies Nativas</h3>
         <div class="subtitle">Melhor desempenho do PRAD</div>
-        <div class="kpi-value" style="font-size:34px">70%</div>
+        <div class="kpi-value" style="font-size:38px">70%</div>
         <ul style="font-size:13px;color:var(--text-sec)">
           <li>Manutenção da maioria dos indivíduos</li>
           <li>Emissão de novas brotações</li>
@@ -480,43 +638,43 @@ tbody tr:hover{background:#101a2c;}
           <li>Maior plasticidade ecológica</li>
         </ul>
       </div>
-      <div class="card">
+      <div class="card glass-card">
         <h3>Espécies Não Nativas</h3>
         <div class="subtitle">Menor adaptação ao Semiárido</div>
-        <div class="kpi-value" style="font-size:34px;color:var(--warning)">30%</div>
+        <div class="kpi-value" style="font-size:38px;color:var(--warning)">30%</div>
         <ul style="font-size:13px;color:var(--text-sec)">
           <li>Maior suscetibilidade ao estresse hídrico</li>
           <li>Maior demanda evaporativa</li>
           <li>Menor plasticidade ecológica</li>
         </ul>
       </div>
-      <div class="card">
+      <div class="card glass-card">
         <h3>Rebrota & Regeneração</h3>
         <div class="subtitle">Indicadores fisiológicos positivos</div>
         <p style="font-size:13px;"><span class="pill green">Rebrota: Presente</span></p>
         <p style="font-size:13px;"><span class="pill green">Regeneração Natural: Mantida</span></p>
-        <p style="font-size:12.5px;color:var(--text-sec);margin-top:10px">Segundo Larcher (2006), rebrota evidencia sistema radicular funcional mesmo após perda foliar significativa — não configura perda definitiva.</p>
+        <p style="font-size:13px;color:var(--text-sec);margin-top:12px">Segundo Larcher (2006), rebrota evidencia sistema radicular funcional mesmo após perda foliar significativa — não configura perda definitiva.</p>
       </div>
     </div>
 
     <div class="grid-2">
-      <div class="card">
-        <h3>Tabela 1 — Comparação de Indicadores Maio × Julho/2026</h3>
+      <div class="card glass-card">
+        <h3>Tabela 1 — Comparação de Indicadores Maio × Agosto/2026</h3>
         <table>
-          <thead><tr><th>Indicador</th><th>Maio</th><th>Junho</th><th>Julho</th><th>Tendência</th></tr></thead>
+          <thead><tr><th>Indicador</th><th>Maio</th><th>Junho</th><th>Julho</th><th>Agosto</th><th>Tendência</th></tr></thead>
           <tbody id="tblComparacao"></tbody>
         </table>
       </div>
-      <div class="card">
+      <div class="card glass-card">
         <h3>Tabela 4 — Indicadores Ecológicos</h3>
         <table>
-          <thead><tr><th>Indicador</th><th>Maio</th><th>Junho</th><th>Julho</th></tr></thead>
+          <thead><tr><th>Indicador</th><th>Maio</th><th>Junho</th><th>Julho</th><th>Agosto</th></tr></thead>
           <tbody id="tblEcologicos"></tbody>
         </table>
       </div>
     </div>
 
-    <div class="card">
+    <div class="card glass-card">
       <h3>Situação das Ações de Manejo — Tabela 3</h3>
       <div class="subtitle">Status de execução por atividade</div>
       <table>
@@ -533,12 +691,12 @@ tbody tr:hover{background:#101a2c;}
     <div class="note">⚠️ Fatores supervenientes: eventos posteriores à implantação, imprevisíveis, sem nexo causal com falha técnica de execução (ABNT NBR ISO 31000; IBAMA, 2011). O contrato do PRAD prevê apenas controle de formigas cortadeiras — não contempla controle de herbívoros desfolhadores.</div>
 
     <div class="grid-2">
-      <div class="card">
+      <div class="card glass-card">
         <h3>Intensidade dos Fatores Supervenientes</h3>
         <div class="subtitle">Escala: 1=Baixo · 2=Moderado · 3=Médio · 4=Alto · 5=Muito Alto</div>
         <canvas id="chartFactorsBar"></canvas>
       </div>
-      <div class="card">
+      <div class="card glass-card">
         <h3>Matriz de Risco Ambiental — Quadro 3</h3>
         <table>
           <thead><tr><th>Evento</th><th>Probabilidade</th><th>Impacto</th><th>Situação</th></tr></thead>
@@ -547,15 +705,15 @@ tbody tr:hover{background:#101a2c;}
       </div>
     </div>
 
-    <div class="card">
-      <h3>Quadro 2 — Painel de Indicadores Ambientais Consolidado (Maio–Julho/2026)</h3>
+    <div class="card glass-card">
+      <h3>Quadro 2 — Painel de Indicadores Ambientais Consolidado (Maio–Agosto/2026)</h3>
       <table>
         <thead><tr><th>Fator</th><th>Influência Observada</th><th>Avaliação Técnica</th></tr></thead>
         <tbody id="tblPainel"></tbody>
       </table>
     </div>
 
-    <div class="card">
+    <div class="card glass-card">
       <h3>Fatores Supervenientes Consolidados — Influência</h3>
       <table>
         <thead><tr><th>Fator</th><th>Influência</th></tr></thead>
@@ -569,15 +727,15 @@ tbody tr:hover{background:#101a2c;}
   <div id="manejo" class="tab-content">
 
     <div class="section-title">Evolução das Atividades de Manejo (Figura 3)</div>
-    <div class="card">
-      <h3>Intensidade Relativa das Ações — Maio × Julho</h3>
+    <div class="card glass-card">
+      <h3>Intensidade Relativa das Ações — Maio × Agosto</h3>
       <div class="subtitle">Irrigação, manutenção hidráulica, monitoramento, capina/roçagem, inspeções técnicas</div>
       <canvas id="chartManejo"></canvas>
     </div>
 
     <div class="grid-2">
-      <div class="card">
-        <h3>Escopo do Monitoramento — Julho/2026</h3>
+      <div class="card glass-card">
+        <h3>Escopo do Monitoramento — Agosto/2026</h3>
         <ul class="two-col-list">
           <li>✅ Inspeção técnica das áreas recuperadas</li>
           <li>✅ Avaliação da sobrevivência das mudas</li>
@@ -589,7 +747,7 @@ tbody tr:hover{background:#101a2c;}
           <li>✅ Capina seletiva / coroamento / roçagem</li>
         </ul>
       </div>
-      <div class="card">
+      <div class="card glass-card">
         <h3>Fora do Escopo Contratual</h3>
         <p style="font-size:13px;color:var(--text-sec)">O plano executivo do PRAD <b>não contempla</b>:</p>
         <ul style="font-size:13px;color:var(--text-sec)">
@@ -597,7 +755,7 @@ tbody tr:hover{background:#101a2c;}
           <li>Reposição automática de mudas por fatores supervenientes</li>
           <li>Controle previsto apenas para formigas cortadeiras</li>
         </ul>
-        <p style="font-size:12.5px;margin-top:12px;">Eventuais intervenções extraordinárias dependem de avaliação técnica específica + manifestação formal da contratante e do órgão ambiental.</p>
+        <p style="font-size:13px;margin-top:14px;">Eventuais intervenções extraordinárias dependem de avaliação técnica específica + manifestação formal da contratante e do órgão ambiental.</p>
       </div>
     </div>
 
@@ -607,20 +765,20 @@ tbody tr:hover{background:#101a2c;}
   <div id="areas" class="tab-content">
 
     <div class="grid-2">
-      <div class="card">
+      <div class="card glass-card">
         <h3>Áreas Monitoradas — Coordenadas e Extensão</h3>
         <table>
           <thead><tr><th>Área</th><th>Latitude (S)</th><th>Longitude (W)</th><th>Área (ha)</th></tr></thead>
           <tbody id="tblAreas"></tbody>
         </table>
       </div>
-      <div class="card">
+      <div class="card glass-card">
         <h3>Distribuição de Área por Talhão (ha)</h3>
         <canvas id="chartAreas"></canvas>
       </div>
     </div>
 
-    <div class="card">
+    <div class="card glass-card">
       <h3>Cronograma de Monitoramento (12 campanhas)</h3>
       <div class="subtitle">✓ = concluído</div>
       <table>
@@ -632,7 +790,7 @@ tbody tr:hover{background:#101a2c;}
   </div>
 
   <div class="footer">
-    Dashboard gerado a partir do Relatório Técnico de Monitoramento — UFV Rio do Peixe I e II — Julho/2026 · Bragagnoli Ambiental (CTF/AIDA 8805586) · Diretor Técnico: Railson Nogueira de Arruda, Eng. Ambiental, CREA-PB RNP 1619008858, ART PB20250690039
+    Dashboard gerado a partir do Relatório Técnico de Monitoramento — UFV Rio do Peixe I e II — Agosto/2026 · Bragagnoli Ambiental (CTF/AIDA 8805586) · Diretor Técnico: Railson Nogueira de Arruda, Eng. Ambiental, CREA-PB RNP 1619008858, ART PB20250690039 · Dados meteorológicos: Open-Meteo (observação) · INMET · Climatologia 30 anos (Climatempo) · AESA-PB
   </div>
 
 </div>
@@ -646,9 +804,9 @@ function showTab(id){
 }
 
 Chart.defaults.font.family = "'Segoe UI',Arial,sans-serif";
-Chart.defaults.color = '#8b949e';
-Chart.defaults.borderColor = '#232c3d';
-const GREEN='#00C853', GREEN_D='#0b3d91', AMBER='#FFC107', RED='#FF5252', BLUE='#2196F3', CYAN='#00BCD4';
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = 'rgba(255,255,255,0.08)';
+const GREEN='#10b981', GREEN_D='#1a3a6a', AMBER='#f59e0b', RED='#ef4444', BLUE='#3b82f6', CYAN='#06b6d4';
 
 // --- Chart 1: Survival comparison ---
 new Chart(document.getElementById('chartSurvival'), {
@@ -656,9 +814,10 @@ new Chart(document.getElementById('chartSurvival'), {
   data:{
     labels:['Espécies Nativas','Espécies Não Nativas'],
     datasets:[
-      {label:'Maio', data:[70,30], backgroundColor:BLUE, borderRadius:6},
-      {label:'Junho', data:[70,30], backgroundColor:CYAN, borderRadius:6},
-      {label:'Julho', data:[70,30], backgroundColor:GREEN, borderRadius:6}
+      {label:'Maio', data:[70,30], backgroundColor:BLUE, borderRadius:8},
+      {label:'Junho', data:[70,30], backgroundColor:CYAN, borderRadius:8},
+      {label:'Julho', data:[70,30], backgroundColor:GREEN, borderRadius:8},
+      {label:'Agosto', data:[70,30], backgroundColor:'#d4af37', borderRadius:8}
     ]
   },
   options:{responsive:true, scales:{y:{beginAtZero:true,max:80,ticks:{callback:v=>v+'%'}}}, plugins:{legend:{position:'bottom'}}}
@@ -671,7 +830,7 @@ new Chart(document.getElementById('chartDonut'), {
     labels:['Ações de manejo executadas','Déficit hídrico regional','Herbivoria','Irrigação emergencial','Rebrota das mudas'],
     datasets:[{data:[30,12,15,25,18], backgroundColor:[GREEN_D,AMBER,RED,BLUE,CYAN]}]
   },
-  options:{responsive:true, plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:11}}}}}
+  options:{responsive:true, plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:11}}}}}
 });
 
 // --- Chart 3: Indicadores integrados (Figura 4) ---
@@ -679,7 +838,7 @@ new Chart(document.getElementById('chartIndicators'), {
   type:'bar',
   data:{
     labels:['Funcionamento da irrigação','Estabilidade do plantio','Rebrota observada','Controle operacional','Herbivoria','Déficit hídrico'],
-    datasets:[{data:[100,90,85,92,35,25], backgroundColor:[GREEN,GREEN,CYAN,GREEN,AMBER,AMBER], borderRadius:6}]
+    datasets:[{data:[100,90,85,92,35,25], backgroundColor:[GREEN,GREEN,CYAN,GREEN,AMBER,AMBER], borderRadius:8}]
   },
   options:{indexAxis:'y', responsive:true, plugins:{legend:{display:false}}, scales:{x:{max:120}}}
 });
@@ -688,18 +847,18 @@ new Chart(document.getElementById('chartIndicators'), {
 new Chart(document.getElementById('chartGrowth'), {
   type:'line',
   data:{
-    labels:['Dez','Jan','Fev','Mar','Abr','Mai','Jun','Jul'],
-    datasets:[{label:'Altura média (cm)', data:[0,15,32,55,73,89,96,100], borderColor:CYAN, backgroundColor:CYAN+'25', tension:.4, fill:true, pointBackgroundColor:CYAN}]
+    labels:['Dez','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago'],
+    datasets:[{label:'Altura média (cm)', data:[0,15,32,55,73,89,96,100,102], borderColor:CYAN, backgroundColor:CYAN+'25', tension:0.4, fill:true, pointBackgroundColor:CYAN, pointRadius:5, pointHoverRadius:7}]
   },
-  options:{responsive:true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true,max:110,ticks:{callback:v=>v+'cm'}}}}
+  options:{responsive:true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true,max:115,ticks:{callback:v=>v+'cm'}}}}
 });
 
 // --- Chart Herbivoria ---
 new Chart(document.getElementById('chartHerbivoria'), {
   type:'line',
   data:{
-    labels:['Jan','Fev','Mar','Abr','Mai','Jun','Jul'],
-    datasets:[{label:'Índice herbivoria', data:[0,2,4,6,9,7,2], borderColor:RED, backgroundColor:RED+'22', tension:.4, fill:true, pointBackgroundColor:RED}]
+    labels:['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago'],
+    datasets:[{label:'Índice herbivoria', data:[0,2,4,6,9,7,2,1], borderColor:RED, backgroundColor:RED+'22', tension:0.4, fill:true, pointBackgroundColor:RED, pointRadius:5, pointHoverRadius:7}]
   },
   options:{responsive:true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true,max:10}}}
 });
@@ -712,7 +871,7 @@ new Chart(document.getElementById('chartRadar'), {
     datasets:[{label:'Índice', data:[88,72,85,95,60,91,70], borderColor:CYAN, backgroundColor:CYAN+'2A', pointBackgroundColor:CYAN}]
   },
   options:{responsive:true, plugins:{legend:{display:false}}, scales:{r:{beginAtZero:true,max:100,
-    grid:{color:'#232c3d'}, angleLines:{color:'#232c3d'}, pointLabels:{color:'#c9d1d9',font:{size:11}}, ticks:{display:false}}}}
+    grid:{color:'rgba(255,255,255,0.08)'}, angleLines:{color:'rgba(255,255,255,0.08)'}, pointLabels:{color:'#e2e8f0',font:{size:11}}, ticks:{display:false}}}}
 });
 
 // --- Historico table ---
@@ -722,36 +881,37 @@ const historico = [
  ['Abril/2026','Continuidade da irrigação','Manutenções preventivas de motobombas e mangueiras'],
  ['Maio/2026','Encerramento da irrigação emergencial','Consolidação das mudas sobreviventes'],
  ['Junho/2026','Estabilidade do cenário','Sem alterações significativas nos indicadores'],
- ['Julho/2026','Estabilidade do cenário','Sem alterações significativas nos indicadores'],
+ ['Julho/2026','Manutenção do status quo','Continuidade da estabilidade ecológica'],
+ ['Agosto/2026','Cenário estável (mês mais seco)','Manutenção da sobrevivência · precipitação 10,4 mm (dentro da climatologia 11 mm)'],
 ];
 document.getElementById('tblHistorico').innerHTML = historico.map(r=>
  `<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('');
 
-// --- Comparacao Maio x Julho (Tabela 1) ---
+// --- Comparacao Maio x Agosto (Tabela 1) ---
 const comp = [
- ['Mortalidade','Estável','Estável','Estável','flat'],
- ['Regeneração Natural','Elevada','Elevada','Elevada','flat'],
- ['Cobertura Vegetal','Estável','Estável','Estável','flat'],
- ['Pragas','Moderada/Alta','Moderada','Baixa','down'],
- ['Rebrota','Presente','Presente','Presente','flat'],
- ['Necessidade de Irrigação','Não','Não','Não','flat'],
- ['Necessidade de Capina','Sim','Sim','Sim','flat'],
- ['Necessidade de Coroamento','Sim','Sim','Sim','flat'],
+ ['Mortalidade','Estável','Estável','Estável','Estável','flat'],
+ ['Regeneração Natural','Elevada','Elevada','Elevada','Elevada','flat'],
+ ['Cobertura Vegetal','Estável','Estável','Estável','Estável','flat'],
+ ['Pragas','Moderada/Alta','Moderada','Baixa','Baixa','down'],
+ ['Rebrota','Presente','Presente','Presente','Presente','flat'],
+ ['Necessidade de Irrigação','Não','Não','Não','Não','flat'],
+ ['Necessidade de Capina','Sim','Sim','Sim','Sim','flat'],
+ ['Necessidade de Coroamento','Sim','Sim','Sim','Sim','flat'],
 ];
-const arrow = t => t==='down' ? '<span class="arrow" style="color:var(--success)">↓</span>' : '<span class="arrow" style="color:#8b949e">→</span>';
+const arrow = t => t==='down' ? '<span class="arrow" style="color:var(--success)">↓</span>' : '<span class="arrow" style="color:#94a3b8">→</span>';
 document.getElementById('tblComparacao').innerHTML = comp.map(r=>
- `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${arrow(r[4])}</td></tr>`).join('');
+ `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${arrow(r[5])}</td></tr>`).join('');
 
 // --- Indicadores ecologicos (Tabela 4) ---
 const ecolog = [
- ['Regeneração Natural','Favorável','Favorável','Favorável'],
- ['Rebrota','Favorável','Favorável','Favorável'],
- ['Cobertura do Solo','Favorável','Favorável','Favorável'],
- ['Controle de Processos Erosivos','Favorável','Favorável','Favorável'],
- ['Serviços Ecossistêmicos','Em recuperação','Em recuperação','Em recuperação'],
+ ['Regeneração Natural','Favorável','Favorável','Favorável','Favorável'],
+ ['Rebrota','Favorável','Favorável','Favorável','Favorável'],
+ ['Cobertura do Solo','Favorável','Favorável','Favorável','Favorável'],
+ ['Controle de Processos Erosivos','Favorável','Favorável','Favorável','Favorável'],
+ ['Serviços Ecossistêmicos','Em recuperação','Em recuperação','Em recuperação','Em recuperação'],
 ];
 document.getElementById('tblEcologicos').innerHTML = ecolog.map(r=>
- `<tr><td>${r[0]}</td><td><span class="pill green">${r[1]}</span></td><td><span class="pill green">${r[2]}</span></td><td><span class="pill green">${r[3]}</span></td></tr>`).join('');
+ `<tr><td>${r[0]}</td><td><span class="pill green">${r[1]}</span></td><td><span class="pill green">${r[2]}</span></td><td><span class="pill green">${r[3]}</span></td><td><span class="pill green">${r[4]}</span></td></tr>`).join('');
 
 // --- Acoes de manejo (Tabela 3) ---
 const acoes = [
@@ -771,7 +931,7 @@ new Chart(document.getElementById('chartFactorsBar'), {
   type:'bar',
   data:{
     labels:['Estiagem prolongada','Elevadas temperaturas','Herbivoria (lagartas/gafanhotos)','Competição por vegetação espontânea','Necessidade de roçagem','Falhas hidráulicas pontuais'],
-    datasets:[{data:[5,4,4,3,3,2], backgroundColor:[RED,RED,AMBER,AMBER,AMBER,BLUE], borderRadius:6}]
+    datasets:[{data:[5,4,4,3,3,2], backgroundColor:[RED,RED,AMBER,AMBER,AMBER,BLUE], borderRadius:8}]
   },
   options:{indexAxis:'y', responsive:true, plugins:{legend:{display:false}}, scales:{x:{max:5}}}
 });
@@ -819,8 +979,8 @@ new Chart(document.getElementById('chartManejo'), {
   data:{
     labels:['Irrigação','Manutenção hidráulica','Monitoramento','Capina/roçagem','Inspeções técnicas'],
     datasets:[
-      {label:'Maio', data:[5,2,2,2,4], borderColor:BLUE, backgroundColor:BLUE+'30', tension:.4, fill:true},
-      {label:'Junho', data:[2,2,5,5,5], borderColor:GREEN, backgroundColor:GREEN+'30', tension:.4, fill:true}
+      {label:'Maio', data:[5,2,2,2,4], borderColor:BLUE, backgroundColor:BLUE+'30', tension:0.4, fill:true},
+      {label:'Agosto', data:[2,2,5,5,5], borderColor:GREEN, backgroundColor:GREEN+'30', tension:0.4, fill:true}
     ]
   },
   options:{responsive:true, scales:{y:{beginAtZero:true,max:6}}, plugins:{legend:{position:'bottom'}}}
@@ -844,13 +1004,13 @@ const areas = [
 ];
 document.getElementById('tblAreas').innerHTML = areas.map(r=>
  `<tr><td><b>${r[0]}</b></td><td>${r[1]} S</td><td>${r[2]} W</td><td>${r[3].toFixed(2)} ha</td></tr>`).join('')
- + `<tr style="background:#101a2c;font-weight:700"><td colspan="3">TOTAL</td><td>4,74 ha</td></tr>`;
+ + `<tr style="background:rgba(255,255,255,0.04);font-weight:700"><td colspan="3">TOTAL</td><td>4,74 ha</td></tr>`;
 
 new Chart(document.getElementById('chartAreas'), {
   type:'bar',
   data:{
     labels: areas.map(a=>a[0]),
-    datasets:[{data: areas.map(a=>a[3]), backgroundColor:CYAN, borderRadius:5}]
+    datasets:[{data: areas.map(a=>a[3]), backgroundColor:CYAN, borderRadius:6}]
   },
   options:{responsive:true, plugins:{legend:{display:false}}, scales:{y:{title:{display:true,text:'hectares'}}}}
 });
@@ -864,8 +1024,8 @@ const crono = [
  ['Monitoramento 5','15/04/2026',true],
  ['Monitoramento 6','15/05/2026',true],
  ['Monitoramento 7','15/06/2026',true],
- ['Monitoramento 8','15/07/2026',false],
- ['Monitoramento 9','15/08/2026',false],
+ ['Monitoramento 8','15/07/2026',true],
+ ['Monitoramento 9','15/08/2026',true],
  ['Monitoramento 10','15/09/2026',false],
  ['Monitoramento 11','15/10/2026',false],
  ['Monitoramento 12','15/11/2026',false],
@@ -893,15 +1053,14 @@ requestAnimationFrame(()=>{
 
 // Fitossanitário panel
 const fito = [
- ['Jan','#00C853'],['Fev','#00C853'],['Mar','#FFC107'],['Abr','#FF9800'],['Mai','#FF5252'],['Jun','#FF9800'],['Jul','#00C853']
-];
-document.getElementById('fitoRow').innerHTML = fito.map(f=>
+ ['Jan','#10b981'],['Fev','#10b981'],['Mar','#f59e0b'],['Abr','#f97316'],['Mai','#ef4444'],['Jun','#f97316'],['Jul','#10b981'],['Ago','#10b981']
+];document.getElementById('fitoRow').innerHTML = fito.map(f=>
  `<div class="fito-item"><div class="fito-dot" style="background:${f[1]};color:${f[1]}"></div><div class="fito-month">${f[0]}</div></div>`).join('');
 
 // Semáforo Ambiental
 const semaforo = [
- ['Solo','#00C853'],['Irrigação','#00C853'],['Crescimento','#00C853'],['Rebrota','#00C853'],
- ['Cobertura','#00C853'],['Estiagem','#FFC107'],['Herbivoria','#00C853']
+ ['Solo','#10b981'],['Irrigação','#10b981'],['Crescimento','#10b981'],['Rebrota','#10b981'],
+ ['Cobertura','#10b981'],['Estiagem','#f59e0b'],['Herbivoria','#10b981']
 ];
 document.getElementById('semaforoRow').innerHTML = semaforo.map(s=>
  `<div class="sem-item"><span class="sem-dot" style="background:${s[1]};color:${s[1]}"></span>${s[0]}</div>`).join('');
@@ -919,10 +1078,8 @@ document.getElementById('iaGrid').innerHTML = iaConclusoes.map(c=>
  `<div class="ia-item"><span class="check">✓</span>${c}</div>`).join('');
 
 // ===================== LIVE CLOCK / DATE / COUNTERS =====================
-const IMPLANT_DATE = new Date(2026,1,1,0,0,0); // 01/02/2026 - referência para estágio de desenvolvimento
-const EXEC_END_DATE = new Date(2025,11,15,0,0,0); // 15/12/2025 - fim da execução do plantio
-const IMPLANT_BASE_DAYS = 75; // tempo total do processo de implantação
-const NEXT_MONITOR = new Date(2026,7,15,0,0,0); // 15/08/2026
+const IMPLANT_DATE = new Date(2026,1,1,0,0,0); // 01/02/2026 - plantio concluído
+const NEXT_MONITOR = new Date(2026,8,15,0,0,0); // 15/09/2026 - Campanha 10
 
 function pad(n){return String(n).padStart(2,'0');}
 
@@ -933,20 +1090,19 @@ function updateClock(){
   const meses=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
   document.getElementById('liveDate').textContent = `${dias[now.getDay()]}, ${now.getDate()} de ${meses[now.getMonth()]} de ${now.getFullYear()}`;
 
-  // Tempo desde fim da execução (15/12/2025)
-  const diffMs = now - EXEC_END_DATE;
+  // Tempo desde implantação
+  const diffMs = now - IMPLANT_DATE;
   const totalDays = Math.floor(diffMs/86400000);
   const years = Math.floor(totalDays/365);
   const months = Math.floor((totalDays%365)/30);
   const days = (totalDays%365)%30;
   document.getElementById('kpiImplantTime').textContent = `${years}a ${months}m ${days}d`;
 
-  // Idade fisiológica = 75 dias de implantação + dias desde fim da execução
-  const physioAgeDays = IMPLANT_BASE_DAYS + totalDays;
-  document.getElementById('kpiPhysioAge').textContent = `${physioAgeDays} dias`;
+  // Idade fisiológica (dias)
+  document.getElementById('kpiPhysioAge').textContent = `${totalDays} dias`;
 
-  // Crescimento médio cm/dia = 100 / idade fisiológica total
-  const growth = physioAgeDays>0 ? (100/physioAgeDays) : 0;
+  // Crescimento médio cm/dia = 100 / idade dias
+  const growth = totalDays>0 ? (100/totalDays) : 0;
   document.getElementById('kpiGrowthRate').textContent = `${growth.toFixed(3)} cm/dia`;
 
   // Countdown próximo monitoramento
@@ -987,6 +1143,15 @@ function updateDevStage(totalDays){
 
 // ===================== LIVE WEATHER (Open-Meteo — API pública, sem chave) =====================
 const WX_LAT=-7.727, WX_LON=-36.492;
+// Dados oficiais observados — Caraúbas-PB (Agosto/2026)
+const WX_AUG_2026 = {
+  precipMensal: 10.4,      // mm (observado, Open-Meteo)
+  tMaxMensal: 33.6,        // °C
+  tMinMensal: 16.8,        // °C
+  climPrecip: 11,          // mm (climatologia 30 anos)
+  climTMax: 28,            // °C
+  climTMin: 19             // °C
+};
 async function loadWeather(){
   const el = document.getElementById('weatherLive');
   try{
