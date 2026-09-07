@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard PRAD | UFV Rio do Peixe I e II — Agosto/2026</title>
-<meta name="description" content="Monitoramento oficial da reposição florestal PRAD - UFV Rio do Peixe I e II - Caraúbas-PB - Campanha Agosto/2026 - Dados meteorológicos oficiais (Open-Meteo/INMET)">
+<title>PRAD · UFV Rio do Peixe I e II — Gestão de Ativos Ambientais (Agosto/2026)</title>
+<meta name="description" content="Gestão de ativos ambientais de usinas fotovoltaicas: monitoramento oficial da reposição florestal PRAD — UFV Rio do Peixe I e II, Caraúbas-PB. Campanha Agosto/2026 · dados meteorológicos oficiais (Open-Meteo/INMET) · responsável técnico Eng. Railson N. de Arruda, CREA-PB.">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1"></script>
 <style>
 :root{
@@ -26,7 +26,8 @@ body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
 body::before{content:'';position:fixed;inset:0;
   background:radial-gradient(ellipse at 20% 20%,rgba(59,130,246,0.08) 0%,transparent 50%),
              radial-gradient(ellipse at 80% 80%,rgba(6,182,212,0.06) 0%,transparent 50%),
-             radial-gradient(ellipse at 50% 50%,rgba(212,175,55,0.04) 0%,transparent 60%);
+             radial-gradient(ellipse at 50% 50%,rgba(212,175,55,0.04) 0%,transparent 60%),
+             radial-gradient(ellipse at 72% 12%,rgba(212,175,55,0.07) 0%,transparent 45%);
   pointer-events:none;z-index:0;}
 .container{max-width:1500px;margin:0 auto;padding:24px;position:relative;z-index:1;}
 
@@ -89,6 +90,36 @@ body::before{content:'';position:fixed;inset:0;
   background:linear-gradient(90deg,var(--cyan),var(--success),var(--gold));
   animation:growBar 1.4s ease;box-shadow:0 0 10px rgba(6,182,212,0.5);}
 @keyframes growBar{from{width:0;}}
+
+/* ===== LOGO & BRAND ===== */
+.header-left{display:flex;align-items:center;gap:18px;flex:1 1 auto;min-width:300px;
+  position:relative;z-index:1;}
+.logo{width:68px;height:68px;object-fit:contain;border-radius:14px;flex-shrink:0;
+  background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.3);
+  box-shadow:0 4px 18px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.2);
+  padding:6px;backdrop-filter:blur(6px);box-sizing:border-box;}
+.header-title-block{min-width:0;}
+.brand-sub{font-size:10px;font-weight:800;letter-spacing:2.4px;text-transform:uppercase;
+  color:rgba(255,255,255,0.7);margin-bottom:4px;}
+.header-accent{position:absolute;right:-40px;bottom:-55px;opacity:0.12;pointer-events:none;
+  filter:drop-shadow(0 0 28px rgba(212,175,55,0.7));}
+.header-accent svg{width:230px;height:230px;}
+
+/* ===== VECTOR ICONS (professional, no emojis) ===== */
+.ico{width:16px;height:16px;flex-shrink:0;stroke:currentColor;fill:none;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-2px;display:inline-block;}
+.ico-sm{width:13px;height:13px;}
+.ico-lg{width:20px;height:20px;}
+.tab-btn .ico{margin-right:7px;vertical-align:-3px;}
+.note .ico,.ia-panel h3 .ico{margin-right:9px;vertical-align:-3px;}
+.ia-panel h3 .ico{color:var(--cyan);}
+.dev-icon svg{width:30px;height:30px;display:block;margin:0 auto;}
+.dev-col-title .ico{margin-right:6px;vertical-align:-2px;}
+.li-check{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;
+  border-radius:50%;background:rgba(16,185,129,0.16);border:1px solid rgba(16,185,129,0.5);
+  color:var(--success);margin-right:8px;flex-shrink:0;font-size:11px;font-weight:900;}
+.two-col-list li{display:flex;align-items:flex-start;}
+.weather-stats .ico{width:14px;height:14px;color:var(--gold);vertical-align:-2px;margin-right:6px;}
 
 /* ===== DYNAMIC STATUS BAR ===== */
 .dynbar{display:flex;align-items:center;gap:20px;
@@ -322,13 +353,26 @@ tbody tr:hover{background:rgba(59,130,246,0.08);box-shadow:inset 0 0 20px rgba(5
 <div class="container">
 
   <div class="header metallic-shine">
-    <div>
-      <h1>🌱 PRAD — UFV Rio do Peixe I e II | Caraúbas-PB</h1>
-      <p>Relatório de Monitoramento da Reposição Florestal · Campanha de Referência: <b>Agosto/2026</b> · Bragagnoli Ambiental / EKORA Consultoria Ambiental</p>
-      <div class="tag-row" style="margin-top:12px">
-        <span class="badge">Diretor Técnico: Railson N. de Arruda — CREA-PB 1619008858</span>
-        <span class="badge">Área Total: 4,74 ha</span>
+    <div class="header-left">
+      <img class="logo" src="assets/logo-ekora.jpg" alt="EKORA Consultoria Ambiental">
+      <div class="header-title-block">
+        <div class="brand-sub">EKORA Consultoria Ambiental · Bragagnoli Ambiental</div>
+        <h1><svg class="ico ico-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 20A7 7 0 0 1 4 13C4 8 9 4 20 4c0 11-4 16-9 16z"/><path d="M4 13C7 10 12 8 16 9"/></svg> PRAD — UFV Rio do Peixe I e II | Caraúbas-PB</h1>
+        <p>Gestão de Ativos Ambientais · Reposição Florestal (PRAD) · Campanha de Referência: <b>Agosto/2026</b> · Bragagnoli Ambiental / EKORA Consultoria Ambiental</p>
+        <div class="tag-row" style="margin-top:12px">
+          <span class="badge">Diretor Técnico: Railson N. de Arruda — CREA-PB 1619008858</span>
+          <span class="badge">Área Total: 4,74 ha</span>
+          <span class="badge">UFV Rio do Peixe I e II · Energia Fotovoltaica</span>
+        </div>
       </div>
+    </div>
+    <div class="header-accent" aria-hidden="true">
+      <svg viewBox="0 0 24 24" stroke="#d4af37" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
     </div>
     <div class="header-status">
       <div class="hs-clock" id="liveClock">--:--:--</div>
@@ -349,7 +393,7 @@ tbody tr:hover{background:rgba(59,130,246,0.08);box-shadow:inset 0 0 20px rgba(5
   </div>
 
   <div class="dynbar glass-card">
-    <div class="db-item">🌿 <span>PRAD</span></div>
+    <div class="db-item"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 20A7 7 0 0 1 4 13C4 8 9 4 20 4c0 11-4 16-9 16z"/><path d="M4 13C7 10 12 8 16 9"/></svg> <span>PRAD — Ativo Ambiental</span></div>
     <div class="db-sep"></div>
     <div class="db-item">Status <b>ESTÁVEL</b></div>
     <div class="db-sep"></div>
@@ -363,11 +407,11 @@ tbody tr:hover{background:rgba(59,130,246,0.08);box-shadow:inset 0 0 20px rgba(5
   </div>
 
   <div class="tabs">
-    <button class="tab-btn active" onclick="showTab('overview')">📊 Visão Geral</button>
-    <button class="tab-btn" onclick="showTab('species')">🌳 Espécies & Sobrevivência</button>
-    <button class="tab-btn" onclick="showTab('factors')">⚠️ Fatores Supervenientes</button>
-    <button class="tab-btn" onclick="showTab('manejo')">🔧 Manejo & Ações</button>
-    <button class="tab-btn" onclick="showTab('areas')">🗺️ Áreas & Cronograma</button>
+    <button class="tab-btn active" onclick="showTab('overview')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Visão Geral</button>
+    <button class="tab-btn" onclick="showTab('species')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 19h8a4 4 0 0 0 3.8-5.2A6 6 0 0 0 18 3.26 6 6 0 0 0 12.32 5.9 5.3 5.3 0 0 0 6.25 8.5 4.5 4.5 0 0 0 8 19Z"/><path d="M12 19v3"/></svg>Espécies & Sobrevivência</button>
+    <button class="tab-btn" onclick="showTab('factors')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Fatores Supervenientes</button>
+    <button class="tab-btn" onclick="showTab('manejo')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Manejo & Ações</button>
+    <button class="tab-btn" onclick="showTab('areas')"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Áreas & Cronograma</button>
   </div>
 
   <!-- ===================== TAB 1: OVERVIEW ===================== -->
@@ -431,7 +475,7 @@ tbody tr:hover{background:rgba(59,130,246,0.08);box-shadow:inset 0 0 20px rgba(5
       </div>
     </div>
 
-    <div class="note">📌 <b>Conclusão técnica (Campanha 9 — Agosto/2026):</b> Não foram verificadas alterações significativas frente às campanhas anteriores (Maio–Julho/2026). Área permanece em fase de estabilidade ecológica, mesmo durante o mês mais seco do ano (agosto — precipitação de 10,4 mm, dentro da climatologia de 11 mm). Fatores supervenientes (estiagem, herbivoria em redução) não caracterizam falha de implantação. Reposição de mudas <b>não recomendada</b>.</div>
+    <div class="note"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> <b>Conclusão técnica (Campanha 9 — Agosto/2026):</b> Não foram verificadas alterações significativas frente às campanhas anteriores (Maio–Julho/2026). Área permanece em fase de estabilidade ecológica, mesmo durante o mês mais seco do ano (agosto — precipitação de 10,4 mm, dentro da climatologia de 11 mm). Fatores supervenientes (estiagem, herbivoria em redução) não caracterizam falha de implantação. Reposição de mudas <b>não recomendada</b>.</div>
 
     <div class="section-title">Painel Executivo — Indicadores Consolidados</div>
     <div class="grid-6">
@@ -482,7 +526,7 @@ tbody tr:hover{background:rgba(59,130,246,0.08);box-shadow:inset 0 0 20px rgba(5
     <div class="section-title">Monitoramento em Tempo Real & Status de Desenvolvimento</div>
     <div class="grid-2">
       <div class="card glass-card">
-        <h3>🌱 Status de Desenvolvimento das Mudas</h3>
+        <h3><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 0-10 1 .5 2 1 2 3a3 3 0 0 0-6 0c0-2-1-3.5-2-4 1 4-2 7 0 10"/><path d="M10 20c-4 0-6-2-6-5 0-2 1-3 1-4 2 0 4 1 5 4"/></svg> Status de Desenvolvimento das Mudas</h3>
         <div class="subtitle">Estágio fisiológico atual · calculado a partir da data de implantação</div>
         <div class="dev-stage-track" id="devStageTrack"></div>
         <div class="ia-grid" style="margin-top:16px">
@@ -491,12 +535,12 @@ tbody tr:hover{background:rgba(59,130,246,0.08);box-shadow:inset 0 0 20px rgba(5
         </div>
         <div class="dev-compare">
           <div class="dev-col">
-            <div class="dev-col-title" style="color:var(--success)">🌳 Nativas</div>
+            <div class="dev-col-title" style="color:var(--success)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 19h8a4 4 0 0 0 3.8-5.2A6 6 0 0 0 18 3.26 6 6 0 0 0 12.32 5.9 5.3 5.3 0 0 0 6.25 8.5 4.5 4.5 0 0 0 8 19Z"/><path d="M12 19v3"/></svg>Nativas</div>
             <div class="dev-col-stage" id="devNativeStage">—</div>
             <div class="dev-col-note">Recuperação de copa em curso · maior plasticidade ecológica ao déficit hídrico do Semiárido.</div>
           </div>
           <div class="dev-col">
-            <div class="dev-col-title" style="color:var(--warning)">🌿 Não Nativas</div>
+            <div class="dev-col-title" style="color:var(--warning)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 20A7 7 0 0 1 4 13C4 8 9 4 20 4c0 11-4 16-9 16z"/><path d="M4 13C7 10 12 8 16 9"/></svg>Não Nativas</div>
             <div class="dev-col-stage" id="devExoticStage">—</div>
             <div class="dev-col-note">Estabelecimento mais lento · maior sensibilidade ao estresse hídrico e evaporativo.</div>
           </div>
@@ -504,14 +548,14 @@ tbody tr:hover{background:rgba(59,130,246,0.08);box-shadow:inset 0 0 20px rgba(5
       </div>
 
       <div class="card glass-card">
-        <h3>🌡️ Monitor Meteorológico — Caraúbas-PB</h3>
+        <h3><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg> Monitor Meteorológico — Caraúbas-PB</h3>
         <div class="subtitle">Dados em tempo real · Open-Meteo + Dados oficiais climatológicos Agosto/2026</div>
         <div id="weatherLive" class="weather-grid">
           <div class="weather-loading">Carregando dados meteorológicos em tempo real...</div>
         </div>
         <div class="weather-stats" style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08)">
           <div style="font-size:12px;color:var(--text-sec);margin-bottom:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px">
-            📊 Síntese Climatológica — Agosto/2026 (Caraúbas-PB)
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Síntese Climatológica — Agosto/2026 (Caraúbas-PB)
           </div>
           <div class="weather-grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">
             <div class="w-item"><div class="w-val">10,4 mm</div><div class="w-lbl">Chuva mensal (real)</div></div>
@@ -615,7 +659,7 @@ tbody tr:hover{background:rgba(59,130,246,0.08);box-shadow:inset 0 0 20px rgba(5
         </table>
       </div>
       <div class="ia-panel">
-        <h3>🤖 IA Ambiental — Análise Automática</h3>
+        <h3><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg> IA Ambiental — Análise Automática</h3>
         <div class="ia-grid" id="iaGrid"></div>
       </div>
     </div>
@@ -688,7 +732,7 @@ tbody tr:hover{background:rgba(59,130,246,0.08);box-shadow:inset 0 0 20px rgba(5
   <!-- ===================== TAB 3: FATORES SUPERVENIENTES ===================== -->
   <div id="factors" class="tab-content">
 
-    <div class="note">⚠️ Fatores supervenientes: eventos posteriores à implantação, imprevisíveis, sem nexo causal com falha técnica de execução (ABNT NBR ISO 31000; IBAMA, 2011). O contrato do PRAD prevê apenas controle de formigas cortadeiras — não contempla controle de herbívoros desfolhadores.</div>
+    <div class="note"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Fatores supervenientes: eventos posteriores à implantação, imprevisíveis, sem nexo causal com falha técnica de execução (ABNT NBR ISO 31000; IBAMA, 2011). O contrato do PRAD prevê apenas controle de formigas cortadeiras — não contempla controle de herbívoros desfolhadores.</div>
 
     <div class="grid-2">
       <div class="card glass-card">
@@ -737,14 +781,14 @@ tbody tr:hover{background:rgba(59,130,246,0.08);box-shadow:inset 0 0 20px rgba(5
       <div class="card glass-card">
         <h3>Escopo do Monitoramento — Agosto/2026</h3>
         <ul class="two-col-list">
-          <li>✅ Inspeção técnica das áreas recuperadas</li>
-          <li>✅ Avaliação da sobrevivência das mudas</li>
-          <li>✅ Identificação de rebrotas</li>
-          <li>✅ Verificação da regeneração natural</li>
-          <li>✅ Avaliação da cobertura vegetal espontânea</li>
-          <li>✅ Registro de evidências fotográficas</li>
-          <li>✅ Acompanhamento de indivíduos atacados</li>
-          <li>✅ Capina seletiva / coroamento / roçagem</li>
+          <li><span class="li-check">✓</span> Inspeção técnica das áreas recuperadas</li>
+          <li><span class="li-check">✓</span> Avaliação da sobrevivência das mudas</li>
+          <li><span class="li-check">✓</span> Identificação de rebrotas</li>
+          <li><span class="li-check">✓</span> Verificação da regeneração natural</li>
+          <li><span class="li-check">✓</span> Avaliação da cobertura vegetal espontânea</li>
+          <li><span class="li-check">✓</span> Registro de evidências fotográficas</li>
+          <li><span class="li-check">✓</span> Acompanhamento de indivíduos atacados</li>
+          <li><span class="li-check">✓</span> Capina seletiva / coroamento / roçagem</li>
         </ul>
       </div>
       <div class="card glass-card">
@@ -790,7 +834,7 @@ tbody tr:hover{background:rgba(59,130,246,0.08);box-shadow:inset 0 0 20px rgba(5
   </div>
 
   <div class="footer">
-    Dashboard gerado a partir do Relatório Técnico de Monitoramento — UFV Rio do Peixe I e II — Agosto/2026 · Bragagnoli Ambiental (CTF/AIDA 8805586) · Diretor Técnico: Railson Nogueira de Arruda, Eng. Ambiental, CREA-PB RNP 1619008858, ART PB20250690039 · Dados meteorológicos: Open-Meteo (observação) · INMET · Climatologia 30 anos (Climatempo) · AESA-PB
+    Dashboard de Gestão de Ativos Ambientais — reposição florestal (PRAD) para usinas fotovoltaicas · UFV Rio do Peixe I e II — Agosto/2026 · Bragagnoli Ambiental (CTF/AIDA 8805586) · Diretor Técnico: Railson Nogueira de Arruda, Eng. Ambiental, CREA-PB RNP 1619008858, ART PB20250690039 · Dados meteorológicos: Open-Meteo (observação) · INMET · Climatologia 30 anos (Climatempo) · AESA-PB
   </div>
 
 </div>
@@ -1119,10 +1163,10 @@ function updateClock(){
 }
 // ===================== DEV STAGE (Nativas x Não Nativas) =====================
 const devStages = [
- {icon:'🌱',name:'Aquisição'},
- {icon:'🌿',name:'Estabelecimento'},
- {icon:'🪴',name:'Crescimento Ativo'},
- {icon:'🌳',name:'Consolidação'}
+ {icon:'<svg class="ico" viewBox="0 0 24 24"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 0-10 1 .5 2 1 2 3a3 3 0 0 0-6 0c0-2-1-3.5-2-4 1 4-2 7 0 10"/><path d="M10 20c-4 0-6-2-6-5 0-2 1-3 1-4 2 0 4 1 5 4"/></svg>',name:'Aquisição'},
+ {icon:'<svg class="ico" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 4 13C4 8 9 4 20 4c0 11-4 16-9 16z"/><path d="M4 13C7 10 12 8 16 9"/></svg>',name:'Estabelecimento'},
+ {icon:'<svg class="ico" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',name:'Crescimento Ativo'},
+ {icon:'<svg class="ico" viewBox="0 0 24 24"><path d="M8 19h8a4 4 0 0 0 3.8-5.2A6 6 0 0 0 18 3.26 6 6 0 0 0 12.32 5.9 5.3 5.3 0 0 0 6.25 8.5 4.5 4.5 0 0 0 8 19Z"/><path d="M12 19v3"/></svg>',name:'Consolidação'}
 ];
 function renderDevTrack(activeIdx){
   const track = document.getElementById('devStageTrack');

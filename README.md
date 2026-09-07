@@ -21,3 +21,6 @@ Arquivo unico, sem dependencias externas de build (CDN Chart.js).
 ## Design
 - Tema vitrilico metalico (glassmorphism + brilhos metalicos)
 - Dados meteorologicos oficiais: Open-Meteo, INMET, AESA-PB, climatologia 30 anos
+- Logo EKORA Consultoria Ambiental (`assets/logo-ekora.jpg`)
+- Icones vetoriais profissionais (SVG inline, sem emojis)
+- Branding de gestao de ativos ambientais para usinas fotovoltaicas (UFV)
