@@ -394,6 +394,33 @@ tbody tr:hover{background:rgba(59,130,246,0.08);box-shadow:inset 0 0 20px rgba(5
 .pest-status.watch{background:rgba(6,182,212,.14);color:var(--cyan);border:1px solid rgba(6,182,212,.4);}
 @media(max-width:900px){.species-card .showcase-grid,.pest-grid{grid-template-columns:1fr 1fr;}}
 @media(max-width:560px){.showcase-item img{height:140px;}.species-card .showcase-grid,.pest-grid{grid-template-columns:1fr;}}
+
+/* ===== LIGHTBOX — individual focus + zoom ===== */
+.showcase-item img,.pest-card img{cursor:zoom-in;}
+.pest-card:hover img{transform:scale(1.06);}
+.showcase-item:hover img{transform:scale(1.06);}
+.lb{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;}
+.lb[hidden]{display:none;}
+.lb-backdrop{position:absolute;inset:0;background:rgba(5,8,14,.88);backdrop-filter:blur(8px);}
+.lb-box{position:relative;z-index:1;max-width:min(96vw,1200px);width:100%;
+  background:var(--card);border:1px solid var(--glass-border);border-radius:var(--radius);
+  box-shadow:var(--shadow),0 0 40px rgba(6,182,212,.25);padding:16px;}
+.lb-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+.lb-title b{font-size:16px;color:var(--white);display:block;letter-spacing:.4px;}
+.lb-title span{font-size:12px;color:var(--text-sec);font-style:italic;}
+.lb-ctrls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.lb-btn{background:rgba(255,255,255,.08);border:1px solid var(--glass-border);color:var(--gray2);
+  width:36px;height:36px;border-radius:8px;font-size:16px;font-weight:800;cursor:pointer;transition:.2s;}
+.lb-btn:hover{background:rgba(6,182,212,.25);border-color:var(--cyan);color:#fff;}
+.lb-btn.lb-close{width:auto;padding:0 14px;background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.4);
+  color:#fcd34d;font-size:12px;letter-spacing:.5px;}
+.lb-zoom-lbl{font-size:13px;color:var(--cyan);font-weight:800;min-width:52px;text-align:center;
+  font-variant-numeric:tabular-nums;}
+.lb-stage{width:100%;height:min(74vh,700px);overflow:hidden;position:relative;border-radius:10px;
+  background:rgba(0,0,0,.4);background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:22px 22px;}
+.lb-stage img{position:absolute;inset:0;margin:auto;max-width:100%;max-height:100%;object-fit:contain;
+  transform-origin:center center;transition:transform .12s ease;cursor:grab;}
 </style>
 </head>
 <body>
@@ -1339,6 +1366,60 @@ function renderPestGrid(containerId,list){
      </div>`).join('');
 }
 renderPestGrid('pestGridCaraibas',PESTS_CARAIBAS);
+
+// ===================== LIGHTBOX — individual focus + zoom =====================
+let lbZoom=1;
+function applyLbZoom(){
+  const img=document.getElementById('lbImg');
+  if(!img) return;
+  img.style.transform=`scale(${lbZoom})`;
+  document.getElementById('lbZoomLbl').textContent=Math.round(lbZoom*100)+'%';
+}
+function setLbZoom(v){lbZoom=Math.min(5,Math.max(0.5,v));applyLbZoom();}
+function openLightbox(src,title,sub){
+  const img=document.getElementById('lbImg');
+  if(!img) return;
+  img.src=src;
+  img.alt=title||'';
+  document.getElementById('lbTitle').textContent=title||'';
+  document.getElementById('lbSub').textContent=sub||'';
+  lbZoom=1;applyLbZoom();
+  document.getElementById('lightbox').hidden=false;
+  document.body.style.overflow='hidden';
+}
+function closeLightbox(){
+  document.getElementById('lightbox').hidden=true;
+  document.body.style.overflow='';
+}
+(function initLightbox(){
+  const lb=document.createElement('div');
+  lb.className='lb';lb.id='lightbox';lb.hidden=true;
+  lb.innerHTML='<div class="lb-backdrop" onclick="closeLightbox()"></div>'+
+    '<div class="lb-box">'+
+      '<div class="lb-top">'+
+        '<div class="lb-title"><b id="lbTitle"></b><span id="lbSub"></span></div>'+
+        '<div class="lb-ctrls">'+
+          '<button class="lb-btn" onclick="setLbZoom(lbZoom-0.5)" title="Reduzir">−</button>'+
+          '<span class="lb-zoom-lbl" id="lbZoomLbl">100%</span>'+
+          '<button class="lb-btn" onclick="setLbZoom(lbZoom+0.5)" title="Ampliar">+</button>'+
+          '<button class="lb-btn" onclick="setLbZoom(1)" title="Redefinir">1:1</button>'+
+          '<button class="lb-btn lb-close" onclick="closeLightbox()">FECHAR</button>'+
+        '</div>'+
+      '</div>'+
+      '<div class="lb-stage"><img id="lbImg" alt=""></div>'+
+    '</div>';
+  document.body.appendChild(lb);
+  const img=document.getElementById('lbImg');
+  img.addEventListener('wheel',e=>{e.preventDefault();setLbZoom(lbZoom+(e.deltaY<0?0.15:-0.15));},{passive:false});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
+  document.addEventListener('click',e=>{
+    const im=e.target.closest('.showcase-item img,.pest-card img');
+    if(!im)return;
+    const card=im.closest('.showcase-item,.pest-card');
+    const cap=card?card.querySelector('.cap, .pest-body'):null;
+    openLightbox(im.src, cap?(cap.querySelector('b')?.textContent||im.alt):im.alt, cap?(cap.querySelector('span')?.textContent||''):'');
+  });
+})();
 </script>
 </body>
 </html>
